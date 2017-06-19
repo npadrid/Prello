@@ -1,0 +1,45 @@
+.createContainer{
+  height: 300px;
+  width: 50%;
+  background: #e8e8e8;
+  padding: 20px;
+  position
+}
+
+body {
+	overflow-x: scroll;
+	white-space: nowrap;
+	margin: 10;
+}
+
+#nav {
+  list-style-type: none;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+#nav .boardButton:hover {
+  backgound-color: #e8e8e8;
+  color:white;
+}
+
+#lol {
+  margin-top: 10px;
+  padding: 0;
+  list-style-type: none;
+}
+
+#lol li {
+  height: 300px;
+  width: 150px;
+  display: inline-block;
+  background: #e8e8e8;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 0 10px;
+}
+
+#lol li:first-child {
+  margin-left:0;
+}
