@@ -68,7 +68,7 @@ nav > ul {
 }
 
 .infoBar {
-  position: absolute;
+  position: fixed;
   width: 100%;
   top: 50px;
   z-index: -1;
