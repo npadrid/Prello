@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="board.css">
+</head>
+<body>
+	<nav>
+		<ul>
+			<li class="navBar">Boards</li>
+				<ul class="boardSideBar">
+					<h3>Personal Boards</h3>
+					<li>Example Board</li>
+					<li>Welcome Board</li>
+				</ul>
+			<li class="navBar"><input type="text" placeholder="Search"></li>
+		</ul>
+		<p>Prello</p>
+	</nav>
+
+	<div class="infoBar">
+		<span id="boardTitle">Example</span>
+		<span id="showMenu">Show Menu</span>
+			<div class="options">
+				<h1>Menu</h1>
+				<ul>
+					<li><input type="text" placeholder="Add Members"></li>
+					<ul class="activity">
+						<h3>Activity</h3>
+						<li>Nathan Padrid added second to this board</li>
+						<li>Nathan Padrid added first to this board</li>
+						<li>Nathan Padrid created this board</li>
+					</ul>
+				</ul>
+			</div>
+	</div>
+
+	<ul class="listOfLists">
+		<li class="listItem">
+			<ul class=cardList>first
+				<li class="card"><span>1.0
+					<div class="cardInfo">
+						<input type="text" placeholder="card title">
+						<ul class="users">
+							<li>user1</li>
+							<li>user2</li>
+						</ul>
+						<input type="text" placeholder="Edit description">
+						<textarea rows="4" cols="50">Write a comment...</textarea>
+					</div>
+					</span>
+				</li>
+			</ul>
+		</li>
+		<li class="listItem">
+			<ul class=cardList>second
+				<li class="card">
+					<span>2.0
+					<div class="cardInfo">
+						<input type="text" placeholder="card title">
+						<ul class="users">
+							<li>user1</li>
+							<li>user2</li>
+						</ul>
+						<input type="text" placeholder="Edit description">
+						<textarea rows="4" cols="50">Write a comment...</textarea>
+					</div>
+					</span>
+				</li>
+			</ul>
+		</li>
+		<li class="listItem"><ul class=cardList>Add a list...
+				<li class="card"><span>Add a list...</span></li>
+			</ul>
+		</li>
+	</ul>
+</body>
+</html>

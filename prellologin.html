@@ -1,41 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<link rel="stylesheet" type"text/css" href="style.css">
+	<link rel="stylesheet" href="reg-login.css">
 </head>
 <body>
-<form action="/register_page.php">
-<div class="container">
-	<h1>Create a Prello Account</h1>
-	<label>Username</label>
-	<input type="text" placeholder="e.g., LandoCalrissian" name="username" required>
-	
-	<label>Email</label>
-	<input type="email" placeholder="Password" name="email" required>
-	
-	<label>Password</label>
-	<input type="password" placeholder="Password" name="password" required>
-	
-	<label>Confirm Password</label>
-	<input type="password" placeholder="Confirm Password" name="confirm_password" required>
+	<div class="createContainer">
+		<h1>Create a Prello Account</h1>
+			<label class="labels">Username</label><br>
+			<input type="text" placeholder="e.g., user_name" name="username" required><br>
+			<label class="labels">Email</label><br>
+			<input type="email" placeholder="e.g., abc@gmail.com" name="email" required><br>
+			<label class="labels">Password</label><br>
+			<input type="password" placeholder="e.g., .........." name="password" required><br>
+			<label class="labels">Confirm Password</label><br>
+			<input type="password" placeholder="e.g., .........." required><br>
+			<button type="submit">Create Acount</button>
+	</div>
 
-	<a href="prelloboards.html"><button type="submit">Create New Account</button></a>
-</div>
-
-</form>
-<form action ="/login+page.php>
-<div class="container">
-	<h1>Log in to Prello</h1>
-	<label>Username</label>
-	<input type="text" placeholder="e.g., LandoCalrissian" name="username" required>
-
-	<label>Password</label>
-	<input type="password" placeholder="Password" name="password" required>
-
-	<a href="prelloboards.html"><button type="submit">Log In</button></a>
-
-	<input type = "checkbox" checked="checked"> Remember me
-</div>
-</form>
+	<div class="logInContainer">
+		<h1>Log in to Prello</h1>
+			<label class="labels">Username</label><br>
+			<input type="text" placeholder="e.g., user_name" name="username" required><br>
+			<label class="labels">Password</label><br>
+			<input type="password" placeholder="e.g., .........." name="password" required><br>
+			<input type="checkbox">Remember Me</input>
+	</div>
 </body>
 </html>
