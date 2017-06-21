@@ -39,12 +39,13 @@ nav > ul {
 }
 
 .navBar:hover + .boardSideBar{
-  display: block;
+  left: 0;
 }
 
-.boardSideBar:hover {
-  display: block;
+.boardSideBar:hover{
+  left: 0;
 }
+
 .boardSideBar {
   list-style-type: none;
   position: absolute;
@@ -53,7 +54,8 @@ nav > ul {
   background: white;
   border-right: #E2E4E6 solid 1px;
   border-bottom: #E2E4E6 solid 1px;
-  display: none;
+  left: -100%;
+  transition: left 500ms;
 }
 .boardSideBar h3{
   color: #959DA1;
