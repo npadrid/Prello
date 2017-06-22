@@ -11,26 +11,27 @@ nav {
   width: 100%;
   top: 0;
   height: 50px;
+  z-index: 100;
 }
 
-nav > p {
+#logo {
+  font-size: 20px;
   display: inline-block;
   position: absolute;
   margin: 0;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.3em;
   color: white;
 }
-nav > ul {
+.navBar {
   list-style: none;
-  display: inline-block;
   margin: 0;
   padding: 0;
 }
 
-.navBar {
+.board-navbtn {
   display: inline-block;
   padding: 5px;
   margin: 10px 5px;
@@ -38,12 +39,16 @@ nav > ul {
   border-radius: 3px;
 }
 
-.navBar:hover + .boardSideBar{
-  left: 0;
+.board-navbtn:hover {
+  opacity: 0.7;
 }
 
-.boardSideBar:hover{
-  left: 0;
+.search-navbtn {
+  display: inline-block;
+  padding: 5px;
+  margin: 10px 5px;
+  background: #ddd;
+  border-radius: 3px;
 }
 
 .boardSideBar {
@@ -71,27 +76,28 @@ nav > ul {
   position: fixed;
   width: 100%;
   top: 50px;
-  z-index: -1;
+  z-index: 90;
 }
 
 .infoBar span {
   display: inline-block;
-  padding: 10px;
-  margin-top: 10px;
 }
 
 #boardTitle {
   font-size: 18px;
-  margin-left: 10px;
+  padding-left: 20px;
+  padding-top: 20px;
 }
 
 #showMenu {
   position: relative;
   font-size: 14px;
   float: right;
+  padding-top: 20px;
+  padding-right: 20px;
 }
 
-.options {
+.sideMenu {
   position: absolute;
   top: 0;
   right: -100%;
@@ -100,17 +106,41 @@ nav > ul {
   background: white;
   border-left: #E2E4E6 solid 1px;
   border-bottom: #E2E4E6 solid 1px;
-  transition: right 500ms;
+  transition: right 525ms;
 }
 
-.options h1 {
+.sideMenu h1 {
   font-size: 18px;
   text-align: center;
   margin: 0;
+  width: 100%;
+  padding-bottom: 10px;
+  border-bottom: #E2E4E6 solid 1px;
+  display: inline-block;
 }
-.options ul{
+
+.menuClose {
+  height: 14px;
+  width: 14px;
+  top: 13px;
+  right: 15px;
+  position: absolute;
+  display: inline-block;
+}
+
+.menuClose:hover {
+  filter: brightness(50%);
+}
+
+.options {
     list-style-type: none;
     padding: 0;
+    margin-bottom: 0;
+}
+
+.addMember {
+  border-bottom: #E2E4E6 solid 1px;
+  padding-bottom: 10px;
 }
 .options input[type=text] {
   width: 100%;
@@ -126,15 +156,13 @@ nav > ul {
 }
 
 .activity li{
-  padding-top: 10px;
+  padding: 10px 0;
+  border-bottom: #E2E4E6 solid 1px;
 }
 
-#showMenu:hover + .options{
-  right: 0;
-}
-
-.options:hover {
-  right: 0;
+.activity li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 .listOfLists {
@@ -143,40 +171,53 @@ nav > ul {
   top: 100px;
   bottom: 0;
   width: 100%;
-  z-index: -1;
   list-style-type: none;
 }
 
 .listItem {
   display: inline-block;
-}
-
-
-.cardList {
-  display: inline-block;
-  padding: 0;
-  list-style-type: none;
-  height: 300px;
-  width: 150px;
-  display: inline-block;
+  vertical-align: top;
   background: #e8e8e8;
   padding: 10px;
   border-radius: 10px;
   margin: 0 10px;
+  position: relative;
 }
 
-.card span{
+.cardList {
+  padding: 0;
+  margin-bottom: 30px;
+  list-style-type: none;
+  width: 150px;
+  border: black solid 1px;
+}
+
+.card{
   position: relative;
   height: 100px;
   width: 130px;
-  display: inline-block;
+  display: block;
   background: white;
   border-radius: 5px;
   padding: 10px;
   z-index: 1;
 }
 
-.card span:hover > .cardInfo{
+.addCard {
+  position: absolute;
+  bottom: 0;
+  margin: 0;
+  padding: 10px;
+  padding-left: 0;
+  width: 80%;
+  display: block;
+}
+
+.addCard:hover {
+  font-weight: bold;
+  text-decoration: underline;
+}
+.card:hover > .cardInfo{
   display: block;
 }
 
