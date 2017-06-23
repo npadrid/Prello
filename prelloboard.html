@@ -36,46 +36,113 @@
 				</ul>
 			</div>
 		</div>
-		<div class=background>
+		<div class="content">
 			<ul class="listOfLists">
 				<li class="listItem">
+					<input type="text" id="cardTitle" placeholder="first">
+					<img class="deleteList" src="close_window.png">
 					<ul class=cardList>
-						<input type="text" placeholder="first">
-						<li class="card">1.0
+						<li class="card">
 							<div class="cardInfo">
-								<textarea placeholder="card title">
-								<ul class="users">
-									<li>user1</li>
-									<li>user2</li>
-								</ul>
-								<input type="text" placeholder="Edit description">
-								<textarea rows="4" cols="50">Write a comment...</textarea>
+								<div class="labels">
+									<ul class="labelList">
+										<li id="label-red"></li>
+										<li id="label-yellow"></li>
+									</ul>
+								</div>
+								<div class="cardName">1.0</div>
+								<div class="userList">
+									<ul class="users">
+										<li class="user">user1</li>
+									</ul>
+								</div>
+							</div>
+						</li>
+						<li class="card">
+							<div class="cardInfo">
+								<div class="labels">
+									<ul class="labelList">
+										<li id="label-red"></li>
+										<li id="label-blue"></li>
+									</ul>
+								</div>
+								<div class="cardName">1.1</div>
+								<div class="userList">
+									<ul class="users">
+										<li class="user">user1</li>
+										<li class="user">user2</li>
+										<li class="user">user3</li>
+									</ul>
+								</div>
 							</div>
 						</li>
 					</ul>
 					<p class="addCard">Add a card...</p>
 				</li>
 				<li class="listItem">
-					<ul class=cardList>second
-						<li class="card">2.0
+					<input type="text" id="cardTitle" placeholder="second">
+					<img class="deleteList" src="close_window.png">
+					<ul class=cardList>
+						<li class="card">
 							<div class="cardInfo">
-								<input type="text" placeholder="card title">
-								<ul class="users">
-									<li>user1</li>
-									<li>user2</li>
-								</ul>
-								<input type="text" placeholder="Edit description">
-								<textarea rows="4" cols="50">Write a comment...</textarea>
+								<div class="labels">
+									<ul class="labelList">
+										<li id="label-green"></li>
+										<li id="label-yellow"></li>
+									</ul>
+								</div>
+								<div class="cardName">2.0</div>
+								<div class="userList">
+									<ul class="users">
+										<li class="user">user1</li>
+									</ul>
+								</div>
+							</div>
+						</li>
+						<li class="card">
+							<div class="cardInfo">
+								<div class="labels">
+									<ul class="labelList">
+										<li id="label-blue"></li>
+									</ul>
+								</div>
+								<div class="cardName">2.1</div>
+								<div class="userList">
+									<ul class="users">
+										<li class="user">user1</li>
+										<li class="user">user3</li>
+									</ul>
+								</div>
 							</div>
 						</li>
 					</ul>
+					<p class="addCard">Add a card...</p>
 				</li>
-				<li class="listItem"><ul class=cardList>Add a list...
-						<li class="card"></li>
-					</ul>
-				</li>
+				<div id="addList">
+					<input type="text" id="listTitle" placeholder="Add a list...">
+					<span id="save-btn">Save</span>
+					<img id="cancelList" src="close_window.png">
+				</div>
 			</ul>
 		</div>
+
+	<div class="modal">
+	  <div class="modal-content">
+				<input type="text" id="modal_title" placeholder="1.0">
+				<ul class="users">
+					<li class="modal_user">user1</li>
+				</ul>
+				<div class="labels">
+					<ul class="labelList">
+						<li id="label-red"></li>
+						<li id="label-yellow"></li>
+					</ul>
+				</div>
+				<input type="text" placeholder="Edit description">
+				<textarea rows="4" cols="50">Write a comment...</textarea>
+	  </div>
+	</div>
+
 	<script src="board.js"></script>
 </body>
 </html>

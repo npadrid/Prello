@@ -165,64 +165,159 @@ nav {
   padding-bottom: 0;
 }
 
-.listOfLists {
-  padding: 50px;
+.content {
   position: absolute;
-  top: 100px;
   bottom: 0;
+  top: 100px;
+  width: 100%;
+  position: fixed;
+}
+
+.listOfLists {
+  padding: 0;
+  position: absolute;
+  top: 0;
   width: 100%;
   list-style-type: none;
+  bottom: 0;
 }
 
 .listItem {
+  position: relative;
   display: inline-block;
   vertical-align: top;
   background: #e8e8e8;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 5px;
   margin: 0 10px;
   position: relative;
+  width: 230px;
+}
+
+#cardTitle {
+  width: 230px;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  padding-bottom: 8px;
+}
+
+::-webkit-input-placeholder{
+  color: black;
+}
+
+.deleteList {
+  height: 14px;
+  width: 14px;
+  top: 13px;
+  right: 15px;
+  position: absolute;
+  display: inline-block;
+}
+
+.deleteList:hover {
+  filter: brightness(50%);
 }
 
 .cardList {
   padding: 0;
   margin-bottom: 30px;
   list-style-type: none;
-  width: 150px;
-  border: black solid 1px;
+  width: 230px;
+  height: 100%;
+  overflow-y: scroll;
 }
 
 .card{
   position: relative;
-  height: 100px;
-  width: 130px;
+  height: 85px;
+  width: 100%;
   display: block;
   background: white;
   border-radius: 5px;
-  padding: 10px;
   z-index: 1;
+  margin-bottom: 6px;
 }
+
+.cardInfo {
+  position: absolute;
+  padding: 5px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.cardName {
+  margin-bottom: 4px;
+}
+
+.labelList {
+  list-style-type: none;
+  padding: 0;
+  margin: 2px 0;
+}
+
+#label-green {
+  background: #61BD4F;
+  border-radius: 15px;
+}
+
+#label-yellow {
+  background: #D9B51C;
+  border-radius: 15px;
+}
+
+#label-red {
+  background: #B04632;
+  border-radius: 15px;
+}
+
+#label-blue {
+  background: #055A8C;
+  border-radius: 15px;
+}
+
+.labelList li{
+  display: inline-block;
+  color: transparent;
+  width: 30px;
+  height: 10px;
+  vertical-align: top;
+}
+
+.userlist {
+  height: 30px;
+  bottom: 0;
+}
+.users {
+  padding: 0;
+  height: 30px;
+  bottom: 0;
+}
+
+.user{
+  display: inline-block;
+  padding: 5px;
+  background: #D6DADC;
+  border-radius: 3px;
+  float: right;
+  margin-left: 2px;
+}
+
 
 .addCard {
   position: absolute;
   bottom: 0;
-  margin: 0;
-  padding: 10px;
+  margin: 10px 10px 10px 0;
   padding-left: 0;
-  width: 80%;
+  width: 50%;
   display: block;
 }
 
 .addCard:hover {
   font-weight: bold;
   text-decoration: underline;
-}
-.card:hover > .cardInfo{
-  display: block;
-}
-
-.cardInfo {
-  transition: bottom 500ms;
 }
 
 .addList {
@@ -231,31 +326,103 @@ nav {
   background: #e8e8e8;
 }
 
-.cardInfo {
-  position: absolute;
-  bottom: -380%;
-  border: #E2E4E6 solid 1px;
-  padding: 5px;
-  left: 25%;
-  display: none;
-  transition: display 500ms;
+.add_btn {
+  float: right;
+  background: white;
+  padding: 5px 10px;
+  border-radius: 3px;
+  margin: 8px 0;
 }
 
-.cardInfo input[type="text"] {
-  padding: 10px;
+.add_btn:hover {
+  opacity: 0.5;
 }
 
-.users {
-  padding: 0;
-}
-.users li {
+#addList {
+  position: relative;
   display: inline-block;
-  padding: 5px;
-  list-style-type: none
+  background: #e8e8e8;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 0 10px;
+  position: relative;
+  width: 230px;
 }
 
-.cardInfo textarea {
+#listTitle{
+  width: 230px;
+  border: none;
+  background: transparent;
+  font-size: 18px;
   display: block;
+}
+
+::-webkit-input-placeholder{
+  color: black;
+}
+
+#save-btn {
+  float: left;
+  background: #61BD4F;
+  padding: 5px 10px;
+  border-radius: 3px;
+  margin-top: 8px;
+  color: white;
+  display: none;
+}
+
+#save-btn:hover {
+  opacity: 0.5;
+}
+
+#cancelList{
+  height: 15px;
+  width: 15px;
+  bottom: 17px;
+  left: 32%;
+  display: inline-block;
+  position: absolute;
+  display: none;
+}
+
+#cancelList:hover {
+  filter: brightness(50%);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 80;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+    opacity: 0.8;
+}
+
+.modal-content {
+  display: none;
+  background-color: white;
+  height: 80%;
+  margin: 0 10%;
+  border-radius: 5px;
+  display: block;
+  padding: 20px;
+  opacity: 1;
+}
+
+.modal-content textarea{
+  margin-top: 20px;
+  display: block;
+}
+
+.modal_user {
+  display: inline-block;
+  list-style: none;
   padding: 5px;
-  margin: 5px;
+  background: #D6DADC;
+  border-radius: 3px;
+  margin-left: 2px;
 }
