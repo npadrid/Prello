@@ -367,21 +367,16 @@ nav {
   filter: brightness(50%);
 }
 
-.addList {
-  height: 50px;
-  width: 150px;
-  background: #e8e8e8;
-}
-
 #addList {
   position: relative;
   display: inline-block;
-  background: #e8e8e8;
+  background: rgb(0, 121, 191);
   padding: 10px;
   border-radius: 5px;
   margin: 0 10px;
   position: relative;
   width: 230px;
+  filter: brightness(80%);
 }
 
 #listTitle{
@@ -390,10 +385,7 @@ nav {
   background: transparent;
   font-size: 18px;
   display: block;
-}
-
-::-webkit-input-placeholder{
-  color: black;
+  color: white;
 }
 
 #save-btn {

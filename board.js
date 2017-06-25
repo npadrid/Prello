@@ -116,10 +116,16 @@ $('#save-btn').click(function(){
   $(this).css('display','none');
   $(this).siblings('#cancelList').css('display','none');
   $(this).siblings('#listTitle').val('Add a list...');
+  $(this).siblings('#listTitle').css('background', 'none');
+  $(this).siblings('#listTitle').css('color', 'white');
+  $(this).parent().css('filter', 'brightness(80%)');
 })
 
 $('#listTitle').click(function(){
   $(this).val('');
+  $(this).css('background', 'white');
+  $(this).css('color', 'black');
+  $(this).parent().css('filter', 'brightness(95%)');
   $(this).siblings('#save-btn').css('display','block');
   $(this).siblings('#cancelList').css('display','inline-block');
 })
@@ -128,4 +134,7 @@ $('#cancelList').click(function(){
   $(this).css('display','none');
   $(this).siblings('#save-btn').css('display','none');
   $(this).siblings('#listTitle').val('Add a list...');
+  $(this).siblings('#listTitle').css('background', 'none');
+  $(this).siblings('#listTitle').css('color', 'white');
+  $(this).parent().css('filter', 'brightness(80%)');
 })
