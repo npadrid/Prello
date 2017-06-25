@@ -1,132 +1,131 @@
-var board_navbtn = document.querySelector('.board-navbtn');
-var boardSideBar = document.querySelector('.boardSideBar');
-var menu_btn = document.querySelector('#showMenu');
-var sideMenu = document.querySelector('.sideMenu');
-var sideMenuTitle = document.querySelector('#menuTitle');
-var content = document.querySelector('.content');
-var closeMenu = document.querySelector('.menuClose');
-var addCard = document.querySelector('.addCard');
-var addList = document.querySelector('#addList');
-var deleteList = document.querySelector('.deleteList');
-var listTitle = document.querySelector('#listTitle')
 var modal = document.querySelector('.modal');
-var card = document.querySelector('.card')
+var listOfLists;
 
+// var listItems = [
+//   {
+//     title: 'first',
+//     cards: [
+//       { id: '1', description: '1.0' },
+//       { id: '2', description: '1.1' },
+//     ]
+//   },
+//   {
+//     title: 'second',
+//     cards: [
+//       { id: '2.1', description: '2.0' },
+//       { id: '2.2', description: '2.1' },
+//     ]
+//   }
+// ];
 
-board_navbtn.addEventListener('click', function(){
-  console.log(boardSideBar.style.left);
-  if(boardSideBar.style.left == '0px'){
-    boardSideBar.style.left = '-100%';
-  }
-  else{
-    boardSideBar.style.left = '0';
-  }
+$('.content').click(function(){
+  $('.boardSideBar').hide();
 })
 
-menu_btn.addEventListener('click', function(){
-  console.log(sideMenu.style.right);
-  sideMenu.style.right = '0';
+$('.board-navbtn').click(function(){
+  $('.boardSideBar').toggle('fast');
 })
 
-closeMenu.addEventListener('click', function(){
-  sideMenu.style.right = '-100%';
+$('#showMenu').click(function(){
+  $('.sideMenu').animate({'right':'0'}, 300);
 })
 
-content.addEventListener('click', function(){
-  boardSideBar.style.left = '-100%';
+$('.menuClose').click(function(){
+  $('.sideMenu').animate({'right':'-100%'}, 300);
 })
 
-addCard.addEventListener('click', function(){
-  var cardList = document.querySelector('.cardList');
+$(function() {
+  listOfLists = $('.listOfLists');
+
+  //Add a card
+  $(listOfLists).on('click', '.addCard', function() {
+    var cardList = $(this).parent().find('.cardList')[0];
+    createCard(cardList);
+    createAddBtn(cardList);
+    $(this).toggle();
+  });
+
+  //Add card button
+  $(listOfLists).on('click', '#add_btn', function(){
+    var cardList = $(this).parent();
+    var cardDescription = cardList.find('.createCard')[0].value;
+    console.log(cardDescription);
+    var card = $('<li/>').addClass('card');
+    var labels = $('<div/>').addClass('labels');
+    var description = $('<div/>').attr('id', 'description');
+    description.html(cardDescription);
+    var userList = $('<div/>').addClass('userList');
+
+    cardList.append(card);
+    card.append(labels, description, userList);
+    cardList.children('.createCard').remove();
+    cardList.children('#add_btn').remove();
+    cardList.children('#cancelCard').remove();
+    $(cardList).parent().find('.addCard').toggle();
+  });
+
+  //Cancel add card
+  $(listOfLists).on('click', '#cancelCard', function(){
+    var cardList = $(this).parent();
+    cardList.children('.createCard').remove();
+    cardList.children('#add_btn').remove();
+    cardList.children('#cancelCard').remove();
+    $(cardList).parent().find('.addCard').toggle();
+  })
+
+  //Delete list
+  $(listOfLists).on('click', '.deleteList', function() {
+    $(this).parent().remove();
+  });
+});
+
+function createCard(list) {
   //get cardName
-  var newcardTitle = document.createElement('textarea');
-  newcardTitle.className = "card";
-  newcardTitle.style.padding = "8px 0 8px 8px";
-  newcardTitle.style.width = "220px";
-  newcardTitle.style.left = "0";
-  newcardTitle.style.border = "0";
-  newcardList.appendChild(cardTitle);
-  var add_btn = document.createElement('span');
-  add_btn.className = "add_btn";
-  add_btn.innerHTML = "Finish";
-  cardList.appendChild(add_btn);
-
-  add_btn.addEventListener('click', function(){
-    //make individual card and insert into list
-    var title = newcardTitle.value;
-    var card = document.createElement('li');
-    card.className = "card";
-    cardList.appendChild(card);
-
-    //add card info
-    var cardInfo = document.createElement('div');
-    cardInfo.className = "cardInfo";
-    card.appendChild(cardInfo);
-
-    //cardName
-    var cardName = document.createElement('div');
-    cardName.innerHTML = title;
-    cardInfo.appendChild(cardName);
-
-    this.parentNode.removeChild(this);
-    newcardTitle.parentNode.removeChild(newcardTitle);
-  })
-})
-
-listTitle.addEventListener('click', function(){
-  var listOfLists = document.querySelector('.listOfLists');
-  var save_btn = document.querySelector('#save-btn');
-  var cancel_btn = document.querySelector('#cancelList');
-  save_btn.style.display = 'block';
-  cancel_btn.style.display = 'inline-block';
-
-  save_btn.addEventListener('click', function(){
-    //make individual list
-    var newlistItem = document.createElement('li');
-    newlistItem.className = "listItem";
-    listOfLists.insertBefore(newlistItem, addList);
-
-    var title = listTitle.value;
-    var cardTitle = document.createElement("input");
-    cardTitle.type = "text";
-    cardTitle.id = "cardTitle";
-    cardTitle.placeholder = title;
-    newlistItem.appendChild(cardTitle);
-
-    var delete_btn = document.createElement("img");
-    delete_btn.src = "close_window.png";
-    delete_btn.className = "deleteList";
-    newlistItem.appendChild(delete_btn);
-
-    var addCard_btn = document.createElement("p");
-    addCard_btn.innerHTML = "Add a card...";
-    addCard_btn.className = "addCard";
-    newlistItem.appendChild(addCard_btn);
-
-    save_btn.style.display = 'none';
-    cancel_btn.style.display = 'none';
-
-  })
-
-  cancel_btn.addEventListener('click', function(){
-    save_btn.style.display = 'none';
-    cancel_btn.style.display = 'none';
-  })
-})
-
-deleteList.addEventListener('click', function(){
-  var listOfLists = document.querySelector('.listOfLists');
-  var listItem = document.querySelector('.listItem');
-  listItem.parentNode.removeChild(listItem);
-  this.parentNode.removeChild(this);
-})
-
-card.onclick = function() {
-    modal.style.display = "block";
+  var cardInfo = document.createElement('textarea');
+  cardInfo.className = "createCard";
+  list.appendChild(cardInfo);
 }
 
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
+function createAddBtn(list){
+  var addCard_btn = $('<span/>').attr('id', 'add_btn').html('Add')[0];
+  var cancelCard_btn = $('<img id="cancelCard">').attr('src', 'close_window.png')[0];
+  list.append(addCard_btn);
+  list.append(cancelCard_btn);
 }
+
+//Add list
+$('#save-btn').click(function(){
+  var listOfLists = $(this).parent().parent();
+  //make individual list
+  var listItem = $('<li/>').addClass('listItem');
+  var lastIndex = $(this).parent().index();
+  listOfLists.children()[lastIndex-1].after(listItem[0]);
+
+  var cardTitle = $('<input>').attr({type: "text", id: "cardTitle", value: $(this).siblings('#listTitle').val()});
+  listItem.append(cardTitle);
+
+  var deleteList_btn = $('<img class="deleteList">').attr('src', 'close_window.png')[0];
+  listItem.append(deleteList_btn);
+
+  var cardList = $('<ul/>').addClass("cardList");
+  listItem.append(cardList);
+
+  var addCard_btn = $('<p/>').addClass("addCard").html("Add a card...")[0];
+  listItem.append(addCard_btn);
+
+  $(this).css('display','none');
+  $(this).siblings('#cancelList').css('display','none');
+  $(this).siblings('#listTitle').val('Add a list...');
+})
+
+$('#listTitle').click(function(){
+  $(this).val('');
+  $(this).siblings('#save-btn').css('display','block');
+  $(this).siblings('#cancelList').css('display','inline-block');
+})
+
+$('#cancelList').click(function(){
+  $(this).css('display','none');
+  $(this).siblings('#save-btn').css('display','none');
+  $(this).siblings('#listTitle').val('Add a list...');
+})

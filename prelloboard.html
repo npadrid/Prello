@@ -1,130 +1,124 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 	<link rel="stylesheet" href="board.css">
 </head>
 <body>
 	<nav>
 		<ul class="navBar">
 			<li class="board-navbtn">Boards</li>
-				<ul class="boardSideBar">
-					<h3>Personal Boards</h3>
-					<li>Example Board</li>
-					<li>Welcome Board</li>
-				</ul>
-			<li class="search-navbtn"><input type="text" placeholder="Search"></li>
+			<ul class="boardSideBar">
+				<h3>Personal Boards</h3>
+				<li>Example Board</li>
+				<li>Welcome Board</li>
+			</ul>
+			<li class="search-navbtn"><input type="text" value="Search"></li>
 		</ul>
 		<p id="logo">Prello</p>
 	</nav>
 
-		<div class="infoBar">
-			<span id="boardTitle">Example</span>
-			<span id="showMenu">Show Menu</span>
-			<div class="sideMenu">
-				<h1 id=menuTitle>Menu</h1>
-				<img class="menuClose" src="close_window.png">
-				<ul class="options">
-					<li class="addMember"><input type="text" placeholder="Add Members"></li>
-					<li class="activityList">
-						<ul class="activity">
-							<h3>Activity</h3>
-							<li>Nathan Padrid added second to this board</li>
-							<li>Nathan Padrid added first to this board</li>
-							<li>Nathan Padrid created this board</li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-		</div>
-		<div class="content">
-			<ul class="listOfLists">
-				<li class="listItem">
-					<input type="text" id="cardTitle" placeholder="first">
-					<img class="deleteList" src="close_window.png">
-					<ul class=cardList>
-						<li class="card">
-							<div class="cardInfo">
-								<div class="labels">
-									<ul class="labelList">
-										<li id="label-red"></li>
-										<li id="label-yellow"></li>
-									</ul>
-								</div>
-								<div class="cardName">1.0</div>
-								<div class="userList">
-									<ul class="users">
-										<li class="user">user1</li>
-									</ul>
-								</div>
-							</div>
-						</li>
-						<li class="card">
-							<div class="cardInfo">
-								<div class="labels">
-									<ul class="labelList">
-										<li id="label-red"></li>
-										<li id="label-blue"></li>
-									</ul>
-								</div>
-								<div class="cardName">1.1</div>
-								<div class="userList">
-									<ul class="users">
-										<li class="user">user1</li>
-										<li class="user">user2</li>
-										<li class="user">user3</li>
-									</ul>
-								</div>
-							</div>
-						</li>
+	<div class="infoBar">
+		<span id="boardTitle">Example</span>
+		<span id="showMenu">Show Menu</span>
+		<div class="sideMenu">
+			<h1 id=menuTitle>Menu</h1>
+			<img class="menuClose" src="close_window.png">
+			<ul class="options">
+				<li class="addMember"><input type="text" placeholder="Add Members"></li>
+				<li class="activityList">
+					<ul class="activity">
+						<h3>Activity</h3>
+						<li>Nathan Padrid added second to this board</li>
+						<li>Nathan Padrid added first to this board</li>
+						<li>Nathan Padrid created this board</li>
 					</ul>
-					<p class="addCard">Add a card...</p>
 				</li>
-				<li class="listItem">
-					<input type="text" id="cardTitle" placeholder="second">
-					<img class="deleteList" src="close_window.png">
-					<ul class=cardList>
-						<li class="card">
-							<div class="cardInfo">
-								<div class="labels">
-									<ul class="labelList">
-										<li id="label-green"></li>
-										<li id="label-yellow"></li>
-									</ul>
-								</div>
-								<div class="cardName">2.0</div>
-								<div class="userList">
-									<ul class="users">
-										<li class="user">user1</li>
-									</ul>
-								</div>
-							</div>
-						</li>
-						<li class="card">
-							<div class="cardInfo">
-								<div class="labels">
-									<ul class="labelList">
-										<li id="label-blue"></li>
-									</ul>
-								</div>
-								<div class="cardName">2.1</div>
-								<div class="userList">
-									<ul class="users">
-										<li class="user">user1</li>
-										<li class="user">user3</li>
-									</ul>
-								</div>
-							</div>
-						</li>
-					</ul>
-					<p class="addCard">Add a card...</p>
-				</li>
-				<div id="addList">
-					<input type="text" id="listTitle" placeholder="Add a list...">
-					<span id="save-btn">Save</span>
-					<img id="cancelList" src="close_window.png">
-				</div>
 			</ul>
 		</div>
+	</div>
+
+	<div class="content">
+		<ul class="listOfLists">
+			<li class="listItem">
+				<input type="text" id="cardTitle" value="first">
+				<img class="deleteList" src="close_window.png">
+				<ul class=cardList>
+					<li class="card">
+						<div class="labels">
+							<ul class="labelList">
+								<li id="label-red"></li>
+								<li id="label-yellow"></li>
+							</ul>
+						</div>
+						<div id="description">1.0</div>
+						<div class="userList">
+							<ul class="users">
+								<li class="user">user1</li>
+							</ul>
+						</div>
+					</li>
+					<li class="card">
+						<div class="labels">
+							<ul class="labelList">
+								<li id="label-red"></li>
+								<li id="label-blue"></li>
+							</ul>
+						</div>
+						<div id="description">1.1</div>
+						<div class="userList">
+							<ul class="users">
+								<li class="user">user1</li>
+								<li class="user">user2</li>
+								<li class="user">user3</li>
+							</ul>
+						</div>
+					</li>
+				</ul>
+				<p class="addCard">Add a card...</p>
+			</li>
+			<li class="listItem">
+				<input type="text" id="cardTitle" value="second">
+				<img class="deleteList" src="close_window.png">
+				<ul class=cardList>
+					<li class="card">
+						<div class="labels">
+							<ul class="labelList">
+								<li id="label-green"></li>
+								<li id="label-yellow"></li>
+							</ul>
+						</div>
+						<div id="description">2.0</div>
+						<div class="userList">
+							<ul class="users">
+								<li class="user">user1</li>
+							</ul>
+						</div>
+					</li>
+					<li class="card">
+						<div class="labels">
+							<ul class="labelList">
+								<li id="label-blue"></li>
+							</ul>
+						</div>
+						<div id="description">2.1</div>
+						<div class="userList">
+							<ul class="users">
+								<li class="user">user1</li>
+								<li class="user">user3</li>
+							</ul>
+						</div>
+					</li>
+				</ul>
+				<p class="addCard">Add a card...</p>
+			</li>
+			<div id="addList">
+				<input type="text" id="listTitle" value="Add a list...">
+				<span id="save-btn">Save</span>
+				<img id="cancelList" src="close_window.png">
+			</div>
+		</ul>
+	</div>
 
 	<div class="modal">
 	  <div class="modal-content">
