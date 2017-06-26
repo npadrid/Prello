@@ -40,78 +40,6 @@
 
 	<div class="content">
 		<ul class="listOfLists">
-			<li class="listItem">
-				<input type="text" id="cardTitle" value="first">
-				<img class="deleteList" src="close_window.png">
-				<ul class=cardList>
-					<li class="card">
-						<div class="labels">
-							<ul class="labelList">
-								<li id="label-red"></li>
-								<li id="label-yellow"></li>
-							</ul>
-						</div>
-						<div id="description">1.0</div>
-						<div class="userList">
-							<ul class="users">
-								<li class="user">user1</li>
-							</ul>
-						</div>
-					</li>
-					<li class="card">
-						<div class="labels">
-							<ul class="labelList">
-								<li id="label-red"></li>
-								<li id="label-blue"></li>
-							</ul>
-						</div>
-						<div id="description">1.1</div>
-						<div class="userList">
-							<ul class="users">
-								<li class="user">user1</li>
-								<li class="user">user2</li>
-								<li class="user">user3</li>
-							</ul>
-						</div>
-					</li>
-				</ul>
-				<p class="addCard">Add a card...</p>
-			</li>
-			<li class="listItem">
-				<input type="text" id="cardTitle" value="second">
-				<img class="deleteList" src="close_window.png">
-				<ul class=cardList>
-					<li class="card">
-						<div class="labels">
-							<ul class="labelList">
-								<li id="label-green"></li>
-								<li id="label-yellow"></li>
-							</ul>
-						</div>
-						<div id="description">2.0</div>
-						<div class="userList">
-							<ul class="users">
-								<li class="user">user1</li>
-							</ul>
-						</div>
-					</li>
-					<li class="card">
-						<div class="labels">
-							<ul class="labelList">
-								<li id="label-blue"></li>
-							</ul>
-						</div>
-						<div id="description">2.1</div>
-						<div class="userList">
-							<ul class="users">
-								<li class="user">user1</li>
-								<li class="user">user3</li>
-							</ul>
-						</div>
-					</li>
-				</ul>
-				<p class="addCard">Add a card...</p>
-			</li>
 			<div id="addList">
 				<input type="text" id="listTitle" value="Add a list...">
 				<span id="save-btn">Save</span>
@@ -121,20 +49,36 @@
 	</div>
 
 	<div class="modal">
+		<div class="modal-background"></div>
 	  <div class="modal-content">
-				<input type="text" id="modal_title" placeholder="1.0">
-				<ul class="users">
-					<li class="modal_user">user1</li>
-				</ul>
-				<div class="labels">
-					<ul class="labelList">
-						<li id="label-red"></li>
-						<li id="label-yellow"></li>
-					</ul>
+			<img id="modal-close" src="close_window.png">
+			<div class="modal-header">
+				<input type="text" id="modal-title">
+			</div>
+			<div class="modal-main">
+				<div class="cardDetails"></div>
+				<div class="comments">
+					<textarea rows="4" cols="50">Write a comment...</textarea>
+	  		</div>
+			</div>
+			<div class="modal-sidebar">
+				<h3>Add</h3>
+				<div class="addOptions">
+					<p id="addMember">Members</p>
+					<p id="addLabel">Labels</p>
+					<p>CheckList</p>
+					<p>Due Date</p>
+					<p>Attachment</p>
 				</div>
-				<input type="text" placeholder="Edit description">
-				<textarea rows="4" cols="50">Write a comment...</textarea>
-	  </div>
+				<h3>Actions</h3>
+				<div class="actionOptions">
+					<p>Move</p>
+					<p>Copy</p>
+					<p>Subscribe</p>
+					<p id="deleteCard">Delete Card</p>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<script src="board.js"></script>

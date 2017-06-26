@@ -76,7 +76,7 @@ nav {
   width: 100%;
   top: 50px;
   height: 50px;
-  z-index: 90;
+  z-index: 1;
   background-color: rgb(0, 121, 191);
 }
 
@@ -180,6 +180,7 @@ nav {
   width: 100%;
   position: fixed;
   background-color: rgb(0, 121, 191);
+  z-index: 5;
 }
 
 .listOfLists {
@@ -198,20 +199,22 @@ nav {
   vertical-align: top;
   background: #e8e8e8;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 3px;
   margin: 0 10px;
   position: relative;
   width: 230px;
   min-height: 50px;
-  max-height: 75%;
 }
 
 #cardTitle {
   width: 230px;
+  height: 22px;
   border: none;
   background: transparent;
-  font-size: 18px;
+  font-size: 14px;
   margin-bottom: 8px;
+  font-weight: 700;
+  padding-left: 5px;
 }
 
 ::-webkit-input-placeholder{
@@ -264,21 +267,23 @@ nav {
 
 #description {
   position: relative;
-  margin-bottom: 4px;
-  left: 5px;
-  top: 4px;
+  left: 8px;
+  top: 8px;
 }
 
 .labels {
   position: relative;
-  left: 3px;
+  left: 8px;
   top: 5px;
+  height: 8px;
+  padding-top: 5px;
+  margin-bottom: 6px;
 }
 
 .labelList {
   list-style-type: none;
   padding: 0;
-  margin: 2px 0;
+  height: 8px;
 }
 
 #label-green {
@@ -304,9 +309,10 @@ nav {
 .labelList li{
   display: inline-block;
   color: transparent;
-  width: 30px;
-  height: 10px;
+  width: 42px;
+  height: 8px;
   vertical-align: top;
+  margin-right: 4px;
 }
 
 .users {
@@ -315,6 +321,7 @@ nav {
   height: 30px;
   bottom: 0;
   right: 5px;
+  top: 10px;
 }
 
 .user{
@@ -417,39 +424,182 @@ nav {
 }
 
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 80;
-    padding-top: 100px;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: black;
-    opacity: 0.8;
+  position: absolute;
+  top: 50px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.modal-background{
+  position: fixed;
+  z-index: 2;
+  margin: 0;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  opacity: 0.5;
+  display: none;
 }
 
 .modal-content {
-  display: none;
-  background-color: white;
-  height: 80%;
-  margin: 0 10%;
+  z-index: 3;
+  position: fixed;
+  background-color: #EDEFF0;
+  min-height: 560px;
+  min-width: 730px;
   border-radius: 5px;
-  display: block;
-  padding: 20px;
-  opacity: 1;
+  display: none;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.modal-content textarea{
-  margin-top: 20px;
-  display: block;
+#modal-close {
+  height: 15px;
+  width: 15px;
+  padding: 10px;
+  top: 0;
+  right: 0;
+  position: absolute;
 }
 
-.modal_user {
+#modal-close:hover {
+  filter: brightness(50%);
+}
+
+.modal-header {
+  margin: 4px 40px 4px 38px;
+  padding: 9pt 9pt 0;
+  position: relative;
+}
+
+#modal-title {
+  display: block;
+  border: none;
+  width: 100%;
+  height: 30px;
+  background: white;
+  font-size: 14px;
+  font-weight: 700;
+  padding-left: 5px;
+  color: #4d4d4d;
+}
+::-webkit-input-value{
+  color: #4d4d4d;
+}
+
+.modal-main {
+  float: left;
+  padding: 8px 9pt 9pt;
+  position: relative;
+  width: 546px;
+  height: 518px;
+}
+
+.cardDetails {
+  margin-left: 30px;
+  margin-top: 10px;
+}
+
+.cardDetails h3 {
+  color: #8c8c8c;
+  margin: 0;
+}
+
+.cardDetails ul {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 8px;
+}
+
+#cardMembers {
   display: inline-block;
-  list-style: none;
+  margin-right: 10px;
+}
+
+#cardMembers li {
+  display: inline-block;
   padding: 5px;
   background: #D6DADC;
   border-radius: 3px;
-  margin-left: 2px;
+  margin-right: 3px;
+}
+
+#cardLabels {
+  display: inline-block;
+  vertical-align: top;
+}
+
+#cardLabels li {
+  height: 30px;
+  width: 35px;
+  display: inline-block;
+  border-radius: 3px;
+  margin-right: 3px;
+}
+
+#editDescription {
+  display: block;
+  width: 470px;
+  border: none;
+  background: transparent;
+  border-radius: 3px;
+  padding: 10px;
+  margin-bottom: 20px;
+  text-decoration: underline;
+}
+
+.comments{
+  display: block;
+  margin-left: 30px;
+}
+
+.modal-sidebar {
+  float: right;
+  padding: 8px 9pt 9pt 0;
+  width: 140px;
+}
+
+.addOptions p {
+  font-size: 14px;
+  background: white;
+  display: block;
+  padding: 5px;
+  padding-top: 8px;
+  border: #E2E4E6 solid 1px;
+  height: 20px;
+  margin: 0;
+  margin-top: 6px;
+  position: relative;
+  font-weight: 700;
+  border-radius: 3px;
+  text-align: center;
+}
+
+.addOptions p:hover {
+  filter: brightness(80%);
+}
+
+.actionOptions p {
+  font-size: 14px;
+  background: white;
+  display: block;
+  padding: 5px;
+  padding-top: 8px;
+  border: #E2E4E6 solid 1px;
+  height: 20px;
+  margin: 0;
+  margin-top: 6px;
+  position: relative;
+  font-weight: 700;
+  border-radius: 3px;
+  text-align: center;
+}
+
+.actionOptions p:hover {
+  filter: brightness(80%);
 }
