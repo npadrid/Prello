@@ -1,25 +1,6 @@
-var modal = document.querySelector('.modal');
 var listOfLists;
 var modal;
-
-var listItems = [
-  {
-    title: 'first',
-    cards: [
-      { id: 1, labels: ['label-red', 'label-yellow'], description: '1.0', users: ['user1']},
-      { id: 2, labels: ['label-red', 'label-blue'], description: '1.1', users: ['user1', 'user2', 'user3']}
-    ]
-  },
-  {
-    title: 'second',
-    cards: [
-      { id: 1, labels: ['label-green', 'label-yellow'], description: '2.0', users: ['user1']},
-      { id: 2, labels: ['label-blue'], description: '2.1', users: ['user1','user3']}
-    ]
-  }
-];
-
-var map = {}
+var map = {};
 
 $('.content').click(function(){
   $('.boardSideBar').hide();
@@ -37,86 +18,101 @@ $('.menuClose').click(function(){
   $('.sideMenu').animate({'right':'-100%'}, 300);
 })
 
-$(function() {
+//get data from api
+var getJson = $.ajax({
+    url: "http://thiman.me:1337/npadrid/list",
+    type: "GET",
+    dataType : "json",
+})
+.done(function (getJson) {
+  for(var i = 0; i < getJson.length; i++){
+    //make map
+    map[getJson[i]._id] = {title: getJson[i].title, cards: getJson[i].cards};
+  }
+  //preload data
   listOfLists = $('.listOfLists');
+  loadData();
+})
 
-  //add preload data
-
-  for(var i = 0; i < listItems.length; i++){
+function loadData(){
+  var addListIndex = 0;
+  for(list in map){
     //make lists
-    var currentList = listItems[i];
-    var listIndex = i;
-    var title = currentList.title;
     var listItem = $('<li/>').addClass('listItem');
-    listOfLists.children()[i].before(listItem[0]);
-
-    var cardTitle = $('<input>').attr({type: "text", id: "cardTitle", value: title});
-    listItem.append(cardTitle);
-
-    var deleteList_btn = $('<img class="deleteList">').attr('src', 'close_window.png')[0];
-    listItem.append(deleteList_btn);
-
-    var newCardList = $('<ul/>').addClass("cardList");
-    listItem.append(newCardList);
-
-    var addCard_btn = $('<p/>').addClass("addCard").html("Add a card...")[0];
-    listItem.append(addCard_btn);
+    listOfLists.children()[addListIndex].before(listItem[0]);
+    var newCardList = createList(list, map[list].title, listItem);
+    addListIndex++;
 
     //make cards
-    for(var j = 0; j < currentList.cards.length; j++){
-      var currentCard = currentList.cards[j];
-      var cardIndex = j;
-      var cardId = currentCard.id;
-      map[title + '-' + cardId] = {listIndex, cardIndex};
-
-      var card = $('<li/>').addClass('card').attr('id', cardId);
-
-      var labels = $('<div/>').addClass('labels').append($('<ul/>').addClass('labelList'));
-      for (var x = 0; x < currentCard.labels.length; x++){
-        $(labels).children()[0].append($('<li/>').attr({id: currentCard.labels[x]})[0]);
+    var cards = map[list].cards;
+    for(cardIndex in cards){
+      var card = cards[cardIndex];
+      var newCard = createCard(card._id, card.description, newCardList);
+      var labels = card.labels;
+      var users = card.users;
+      for (var i = 0; i < labels.length; i++){
+        $(newCard).children('.labels').children('.labelList')[0].append($('<li/>').attr({id: labels[i]})[0]);
       }
-
-      var cardDescription = $('<div/>').attr('id', 'description').html(currentCard.description);
-
-      var userList = $('<div/>').addClass('userList').append($('<ul/>').addClass('users'));
-      for (var y = 0; y < currentCard.users.length; y++){
-        $(userList).children()[0].append($('<li/>').addClass('user').html(currentCard.users[y])[0]);
+      for (var j = 0; j < users.length; j++){
+        $(newCard).children('.userList').children('.users')[0].append($('<li/>').addClass('user').html(users[j])[0]);
       }
-
-      newCardList.append(card);
-      card.append(labels, cardDescription, userList);
     }
   }
+}
 
-  //Add a card
+function createList(id, title, listItem){
+  listItem.attr('id', id);
+  var cardTitle = $('<input>').attr({type: "text", id: "cardTitle", value: title});
+  var deleteList_btn = $('<img class="deleteList">').attr('src', 'close_window.png')[0];
+  var newCardList = $('<ul/>').addClass("cardList");
+  var addCard_btn = $('<p/>').addClass("addCard").html("Add a card...")[0];
+
+  listItem.append(cardTitle, deleteList_btn, newCardList, addCard_btn);
+  return newCardList;
+}
+
+function createCard(id, description, cardList){
+  var card = $('<li/>').addClass('card').attr('id', id);
+  var labels = $('<div/>').addClass('labels').append($('<ul/>').addClass('labelList'));
+  var cardDescription = $('<div/>').attr('id', 'description').html(description);
+  var users = $('<div/>').addClass('userList').append($('<ul/>').addClass('users'));
+
+  cardList.append(card);
+  card.append(labels, cardDescription, users);
+  return card;
+}
+
+$(function() {
+  listOfLists = $('.listOfLists');
+  // //Add a card
   $(listOfLists).on('click', '.addCard', function() {
-    var cardList = $(this).parent().find('.cardList')[0];
+    var cardList = $(this).siblings('.cardList')[0];
     createCardForm(cardList);
-    createAddBtn(cardList);
     $(this).toggle();
     $(cardList).css('margin-bottom','0px');
   });
 
-  //Add card button
+  //Save card button
   $(listOfLists).on('click', '#add_btn', function(){
     var cardList = $(this).parent();
-    var cardListIndex = $(cardList).parent().index();
-    var cardMap = listItems[cardListIndex].cards;
-    var cardMapLength = cardMap.length;
+    var listItemId = $(cardList).parent().attr('id');
+    var cardDescription = $(this).siblings('.createCard')[0].value;
 
-    var cardDescription = cardList.find('.createCard')[0].value;
-    var card = $('<li/>').addClass('card').attr('id', cardMapLength+1);
-    var labels = $('<div/>').addClass('labels');
-    var description = $('<div/>').attr('id', 'description');
-    description.html(cardDescription);
-    var userList = $('<div/>').addClass('userList');
+    //update map and api
+    var postJson = $.post("http://thiman.me:1337/npadrid/list/" + listItemId +  "/card",
+      {'labels': [''], "description": cardDescription, "users": ['']}
+    );
+    postJson.done(function(data){
+      var cardId = data.cards[data.cards.length-1]._id;
+      createCard(cardId, cardDescription, cardList);
+      map[listItemId].cards.push({
+        "description" : cardDescription,
+        'labels': [],
+        "users":[],
+        "_id": cardId
+      })
+    })
 
-    //update listItems
-    addCardMap(cardDescription, cardMap, cardListIndex, cardMapLength, listItems[cardListIndex].title);
-
-    //update cardList
-    cardList.append(card);
-    card.append(labels, description, userList);
     cardList.children('.createCard').remove();
     cardList.children('#add_btn').remove();
     cardList.children('#cancelCard').remove();
@@ -136,18 +132,17 @@ $(function() {
 
   //Delete list
   $(listOfLists).on('click', '.deleteList', function() {
-    var numCards = listItems[$(this).parent().index()].cards.length;
-
+    var listId = $(this).parent().attr('id');
     //update map
-    for (var i = 1; i <= numCards; i++){
-      delete map[listItems[$(this).parent().index()].title + '-' + i];
-    }
+    delete map[listId];
 
-    //update listItems
-    listItems.splice($(this).parent().index(), 1);
-    console.log(listItems);
+    //update api
+    var deleteJson = $.ajax({
+      url: "http://thiman.me:1337/npadrid/list/" + listId,
+      type: "DELETE",
+    })
 
-    //update listOfLists
+    // //update listOfLists
     $(this).parent().remove();
   });
 
@@ -156,73 +151,20 @@ $(function() {
     $(listOfLists).parent().siblings('.modal').children().css('display','block');
     $(listOfLists).parent().css('z-index', '-1');
     displayCardInfo(this);
-    console.log(this);
     deleteCard(this);
   })
 
 });
 
-function addCardMap(description, cardMap, listIndex, cardIndex, title){
-  var cardItem = {};
-  cardItem.id = cardIndex+1;
-  cardItem.labels = [];
-  cardItem.description = description;
-  cardItem.users = [];
-  cardMap.push(cardItem);
-
-  //update map
-  map[title + '-' + cardItem.id] = {listIndex, cardIndex};
-}
-
 function createCardForm(list) {
-  //get cardName
   var cardInfo = document.createElement('textarea');
   cardInfo.className = "createCard";
-  list.appendChild(cardInfo);
-}
-
-function createAddBtn(list){
   var addCard_btn = $('<span/>').attr('id', 'add_btn').html('Add')[0];
   var cancelCard_btn = $('<img id="cancelCard">').attr('src', 'close_window.png')[0];
-  list.append(addCard_btn);
-  list.append(cancelCard_btn);
+  list.append(cardInfo, addCard_btn, cancelCard_btn);
 }
 
 //Add list
-$('#save-btn').click(function(){
-  var listOfLists = $(this).parent().parent();
-  //make individual list
-  var listItem = $('<li/>').addClass('listItem');
-  var lastIndex = $(this).parent().index();
-  listOfLists.children()[lastIndex-1].after(listItem[0]);
-
-  var newTitle = $(this).siblings('#listTitle').val()
-  var cardTitle = $('<input>').attr({type: "text", id: "cardTitle", value: newTitle});
-  listItem.append(cardTitle);
-
-  var deleteList_btn = $('<img class="deleteList">').attr('src', 'close_window.png')[0];
-  listItem.append(deleteList_btn);
-
-  var cardList = $('<ul/>').addClass("cardList");
-  listItem.append(cardList);
-
-  var addCard_btn = $('<p/>').addClass("addCard").html("Add a card...")[0];
-  listItem.append(addCard_btn);
-
-  //update listItems
-  var newListItem = {};
-  newListItem.title = $(this).siblings('#listTitle').val();
-  newListItem.cards = [];
-  listItems.push(newListItem);
-
-  $(this).css('display','none');
-  $(this).siblings('#cancelList').css('display','none');
-  $(this).siblings('#listTitle').val('Add a list...');
-  $(this).siblings('#listTitle').css('background', 'none');
-  $(this).siblings('#listTitle').css('color', 'white');
-  $(this).parent().css('filter', 'brightness(80%)');
-})
-
 $('#listTitle').click(function(){
   $(this).val('');
   $(this).css('background', 'white');
@@ -230,6 +172,28 @@ $('#listTitle').click(function(){
   $(this).parent().css('filter', 'brightness(95%)');
   $(this).siblings('#save-btn').css('display','block');
   $(this).siblings('#cancelList').css('display','inline-block');
+})
+
+$('#save-btn').click(function(){
+  //make individual list
+  var listItem = $('<li/>').addClass('listItem');
+  var lastIndex = $(this).parent().index();
+  var listTitle = $(this).siblings('#listTitle').val();
+  listOfLists.children()[lastIndex-1].after(listItem[0]);
+
+  //update map and api
+  var postJson = $.post("http://thiman.me:1337/npadrid/list", {'title': listTitle});
+  postJson.done(function(data){
+    createList(data._id, listTitle, listItem);
+    map[data._id] = {title: listTitle, cards: []};
+  })
+
+  $(this).css('display','none');
+  $(this).siblings('#cancelList').css('display','none');
+  $(this).siblings('#listTitle').val('Add a list...');
+  $(this).siblings('#listTitle').css('background', 'none');
+  $(this).siblings('#listTitle').css('color', 'white');
+  $(this).parent().css('filter', 'brightness(80%)');
 })
 
 $('#cancelList').click(function(){
@@ -243,38 +207,40 @@ $('#cancelList').click(function(){
 
 function displayCardInfo(card){
   modal = $('.modal-main');
-  var list = $(card).parent().parent();
-  var listIndex = list.index();
-  var cardIndex = $(card).index();
+  var listObj = map[$(card).parent().parent().attr('id')];
+  var cardId = $(card).attr('id');
   var modal_detail = $(modal).children('.cardDetails');
-  modal.siblings('.modal-header').children('#modal-title').attr({value: listItems[listIndex].cards[cardIndex].description});
-  var numUsers = listItems[listIndex].cards[cardIndex].users;
-  var numLabels = listItems[listIndex].cards[cardIndex].labels;
 
-  if(numUsers.length !== 0){
-    var cardMembers = $('<div/>').attr('id', 'cardMembers');
-    modal_detail.append(cardMembers[0]);
-    var memberLabel = $('<h3/>').html('Members');
-    cardMembers.append(memberLabel);
-    var modalUsers = $('<ul/>').attr('id', 'modalUsers');
-    for(var i = 0; i < numUsers.length; i++){
-      modalUsers.append($('<li/>').attr('id', 'user').html(numUsers[i]));
-    }
-    cardMembers.append(modalUsers);
-  }
+  for(cardIndex in listObj.cards){
+    var card = listObj.cards[cardIndex];
+    if (card._id === cardId){
+      modal.siblings('.modal-header').children('#modal-title').attr({value: card.description});
+      if(card.users.length !== 0){
+        var cardMembers = $('<div/>').attr('id', 'cardMembers');
+        modal_detail.append(cardMembers[0]);
+        var memberLabel = $('<h3/>').html('Members');
+        cardMembers.append(memberLabel);
+        var modalUsers = $('<ul/>').attr('id', 'modalUsers');
+        for(var i = 0; i < card.users.length; i++){
+          modalUsers.append($('<li/>').attr('id', 'user').html(card.users[i]));
+        }
+        cardMembers.append(modalUsers);
+      }
 
-  if(numLabels.length !== 0){
-    var cardLabels = $('<div/>').attr('id', 'cardLabels');
-    modal_detail.append(cardLabels[0]);
-    var memberLabel = $('<h3/>').html('Labels');
-    cardLabels.append(memberLabel);
-    var modalLabels = $('<ul/>').attr('id', 'modalLabels');
-    for(var j = 0; j < numLabels.length; j++){
-      modalLabels.append($('<li/>').attr('id', numLabels[j]));
+      if(card.labels.length !== 0){
+        var cardLabels = $('<div/>').attr('id', 'cardLabels');
+        modal_detail.append(cardLabels[0]);
+        var memberLabel = $('<h3/>').html('Labels');
+        cardLabels.append(memberLabel);
+        var modalLabels = $('<ul/>').attr('id', 'modalLabels');
+        for(var j = 0; j < card.labels.length; j++){
+          modalLabels.append($('<li/>').attr('id', card.labels[j]));
+        }
+        cardLabels.append(modalLabels);
+      }
     }
-    cardLabels.append(modalLabels);
   }
-  $(modal).children('.cardDetails').append($('<input>').attr({type: "text", id: "editDescription", value: 'Edit the description...'}));
+    $(modal).children('.cardDetails').append($('<input>').attr({type: "text", id: "editDescription", value: 'Edit the description...'}));
 }
 
 $('.modal-background').click(function(){
@@ -291,16 +257,24 @@ $('#modal-close').click(function(){
 
 function deleteCard(card){
   $('#deleteCard').click(function(){
-    console.log(card);
-    console.log($(card).parent().parent());
-    listIndex = $(card).parent().parent().index();
-    console.log(map);
-    //update map
-    delete map[listItems[listIndex].title + '-' + $(card).attr('id')];
-
-    //update listItems
-    cardIndex = listItems[listIndex].cards[$(card).attr('id')-1].id - 1;
-    listItems[listIndex].cards.splice(cardIndex, 1);
+    var listId = $(card).parent().parent().attr('id');
+    //update map and api
+    for(list in map){
+      if(list === listId){
+        var cards = map[list].cards;
+        for(cardIndex in cards){
+          if(cards[cardIndex]._id === $(card).attr('id')){
+            var deleteJson = $.ajax({
+              url: "http://thiman.me:1337/npadrid/list/" + listId + "/card/" + cards[cardIndex]._id,
+              type: "DELETE"
+            })
+            deleteJson.done(function(){
+              cards.splice(cardIndex, 1);
+            })
+          }
+        }
+      }
+    }
 
     //update cardList
     $(card).parent().children('#' + $(card).attr('id')).remove();
@@ -308,5 +282,7 @@ function deleteCard(card){
     $(modal).parent().parent().children().css('display','none');
     $(listOfLists).parent().css('z-index', '5');
     $(modal).children('.cardDetails').children().remove();
+    $(this).remove();
+    $(modal).siblings('.modal-sidebar').children('.actionOptions').append($('<p/>').attr('id', 'deleteCard').html('Delete Card'));
   })
 }
