@@ -1,6 +1,9 @@
 var listOfLists;
 var modal;
+var main_modal;
+var mainCard;
 var map = {};
+var labelColors = ["label-green", "label-yellow", "label-red", "label-blue"];
 
 $('.content').click(function(){
   $('.boardSideBar').hide();
@@ -48,13 +51,11 @@ function loadData(){
     for(cardIndex in cards){
       var card = cards[cardIndex];
       var newCard = createCard(card._id, card.description, newCardList);
-      var labels = card.labels;
-      var users = card.users;
-      for (var i = 0; i < labels.length; i++){
-        $(newCard).children('.labels').children('.labelList')[0].append($('<li/>').attr({id: labels[i]})[0]);
+      if(card.hasOwnProperty('labels') && card.labels[0] !== ""){
+        addLabelList(newCard, card.labels);
       }
-      for (var j = 0; j < users.length; j++){
-        $(newCard).children('.userList').children('.users')[0].append($('<li/>').addClass('user').html(users[j])[0]);
+      if(card.hasOwnProperty('users')&& card.users[0] !== ""){
+        addMemberList(newCard, card.users);
       }
     }
   }
@@ -73,15 +74,28 @@ function createList(id, title, listItem){
 
 function createCard(id, description, cardList){
   var card = $('<li/>').addClass('card').attr('id', id);
-  var labels = $('<div/>').addClass('labels').append($('<ul/>').addClass('labelList'));
   var cardDescription = $('<div/>').attr('id', 'description').html(description);
-  var users = $('<div/>').addClass('userList').append($('<ul/>').addClass('users'));
 
   cardList.append(card);
-  card.append(labels, cardDescription, users);
+  card.append(cardDescription);
   return card;
 }
 
+function addLabelList(card, labels){
+  $(card).prepend($('<div/>').addClass('labels').append($('<ul/>').addClass('labelList')));
+  for (var i = 0; i < labels.length; i++){
+    $(card).find('.labelList')[0].append($('<li/>').attr({id: labels[i]})[0]);
+  }
+}
+
+function addMemberList(card, users){
+  $(card).append($('<div/>').addClass('userList').append($('<ul/>').addClass('users')));
+  for (var j = 0; j < users.length; j++){
+    $(card).find('.users')[0].append($('<li/>').addClass('user').html(users[j])[0]);
+  }
+}
+
+//list functions
 $(function() {
   listOfLists = $('.listOfLists');
   // //Add a card
@@ -130,6 +144,12 @@ $(function() {
     $(cardList).css('margin-bottom','25px');
   })
 
+  //update list
+  // $(listOfLists).on('click', '#cardTitle', function(){
+  //   console.log("click: "+$(this).val());
+  //
+  // });
+
   //Delete list
   $(listOfLists).on('click', '.deleteList', function() {
     var listId = $(this).parent().attr('id');
@@ -151,9 +171,8 @@ $(function() {
     $(listOfLists).parent().siblings('.modal').children().css('display','block');
     $(listOfLists).parent().css('z-index', '-1');
     displayCardInfo(this);
-    deleteCard(this);
+    mainCard = this;
   })
-
 });
 
 function createCardForm(list) {
@@ -208,6 +227,7 @@ $('#cancelList').click(function(){
 function displayCardInfo(card){
   modal = $('.modal-main');
   var listObj = map[$(card).parent().parent().attr('id')];
+  $(modal).siblings('.modal-header').children('#modal-cardLocation').html("in list " + listObj.title);
   var cardId = $(card).attr('id');
   var modal_detail = $(modal).children('.cardDetails');
 
@@ -215,7 +235,7 @@ function displayCardInfo(card){
     var card = listObj.cards[cardIndex];
     if (card._id === cardId){
       modal.siblings('.modal-header').children('#modal-title').attr({value: card.description});
-      if(card.users.length !== 0){
+      if(card.hasOwnProperty('users')&& card.users[0] !== ""){
         var cardMembers = $('<div/>').attr('id', 'cardMembers');
         modal_detail.append(cardMembers[0]);
         var memberLabel = $('<h3/>').html('Members');
@@ -227,7 +247,7 @@ function displayCardInfo(card){
         cardMembers.append(modalUsers);
       }
 
-      if(card.labels.length !== 0){
+      if(card.hasOwnProperty('labels') && card.labels[0] !== ""){
         var cardLabels = $('<div/>').attr('id', 'cardLabels');
         modal_detail.append(cardLabels[0]);
         var memberLabel = $('<h3/>').html('Labels');
@@ -247,29 +267,154 @@ $('.modal-background').click(function(){
   $(this).parent().children().css('display','none');
   $(listOfLists).parent().css('z-index', '5');
   $(this).siblings('.modal-content').children('.modal-main').children('.cardDetails').children().remove();
+  $(this).siblings('.modal-content').find('.addOptions').children().css('display', 'block');
+  $(this).siblings('.modal-content').children('.modal-sidebar').children('.addOptions').children('#availableMembers').remove();
+  $(this).siblings('.modal-content').children('.modal-sidebar').children('.addOptions').children('#availableLabels').remove();
 })
 
 $('#modal-close').click(function(){
   $(this).parent().parent().children().css('display','none');
   $(listOfLists).parent().css('z-index', '5');
   $(this).siblings('.modal-main').children('.cardDetails').children().remove();
+  $(this).siblings('.modal-sidebar').children('.addOptions').children().css('display', 'block');
+  $(this).siblings('.modal-sidebar').children('.addOptions').children('#availableMembers').remove();
+  $(this).siblings('.modal-sidebar').children('.addOptions').children('#availableLabels').remove();
 })
 
-function deleteCard(card){
-  $('#deleteCard').click(function(){
-    var listId = $(card).parent().parent().attr('id');
+//modal functions
+$(function(){
+  main_modal = $('.modal-content');
+  //update members
+  $(main_modal).on('click', '#addMember', function(){
+    $(this).siblings().css('display', 'none');
+    $(this).siblings('#availableMembers').remove();
+    $(this).parent().append($('<div/>').attr('id', 'availableMembers').append($('<h3/>').html('Add members')));
+    $(this).siblings('#availableMembers').append($('<input>').attr({type: "text", id: "newMember"}), $('<span/>').attr('id', 'newMemberBtn').html('Add'));
+  });
+  $(main_modal).on('click', '#newMemberBtn', function(){
+    var listObj = map[$(mainCard).parent().parent().attr('id')];
+    var cardId = $(mainCard).attr('id');
+    var cardLabels;
+    var cardDescription;
+    var cardUsers;
+    //update map
+    for(cardIndex in listObj.cards){
+      var currentCard = listObj.cards[cardIndex];
+      if (currentCard._id === cardId){
+        if(currentCard.users[0] == ""){
+          currentCard.users[0] = $(this).siblings('#newMember').val();
+        }
+        else{
+          currentCard.users.push($(this).siblings('#newMember').val());
+        }
+        cardLabels = currentCard.labels;
+        cardDescription = currentCard.description;
+        cardUsers = currentCard.users;
+      }
+    }
+    // //update api
+    var patchJson = $.ajax({
+        url: "http://thiman.me:1337/npadrid/list/" + $(mainCard).parent().parent().attr('id') + "/card/" + cardId,
+        type: "PATCH",
+        data: {"labels": cardLabels,
+        "description": cardDescription,
+        "users": cardUsers,
+        "_id": cardId},
+        dataType : "json",
+    })
+
+    //update card
+    if($(mainCard).find('.users').length == 0){
+      $(mainCard).append($('<div/>').addClass('userList').append(
+        $('<ul/>').addClass('users').append(
+          $('<li/>').addClass('user').html($(this).siblings('#newMember').val())[0]
+        )
+      )
+    )}
+    else{
+      $(mainCard).find('.users')[0].append($('<li/>').addClass('user').html($(this).siblings('#newMember').val())[0]);
+    }
+    $(this).parent().parent().parent().siblings('.modal-main').children('.cardDetails').children().remove();
+    $(this).parent().siblings().css('display', 'block');
+    $(this).siblings('#newMember').val('');
+    $(this).parent().remove();
+    displayCardInfo(mainCard);
+  })
+
+  //update labels
+  $(main_modal).on('click', '#addLabel', function(){
+    $(this).siblings().css('display', 'none');
+    $(this).siblings('#availableLabels').remove();
+    $(this).parent().append($('<div/>').attr('id', 'availableLabels'));
+    for(labelIndex in labelColors){
+      $(this).siblings('#availableLabels').append($('<div/>').addClass('modal_label').attr('id', labelColors[labelIndex]));
+    }
+  });
+  $(main_modal).on('click', '.modal_label', function(){
+    var listObj = map[$(mainCard).parent().parent().attr('id')];
+    var cardId = $(mainCard).attr('id');
+    var cardLabels;
+    var cardDescription;
+    var cardUsers;
+    //update map
+    for(cardIndex in listObj.cards){
+      var currentCard = listObj.cards[cardIndex];
+      if (currentCard._id === cardId){
+        if(currentCard.labels[0] == ""){
+          currentCard.labels[0] = $(this).attr('id');
+        }
+        else{
+          currentCard.labels.push($(this).attr('id'));
+        }
+        cardLabels = currentCard.labels;
+        cardDescription = currentCard.description;
+        cardUsers = currentCard.users;
+      }
+    }
+    //update api
+    var patchJson = $.ajax({
+        url: "http://thiman.me:1337/npadrid/list/" + $(mainCard).parent().parent().attr('id') + "/card/" + cardId,
+        type: "PATCH",
+        data: {"labels": cardLabels,
+        "description": cardDescription,
+        "users": cardUsers,
+        "_id": cardId},
+        dataType : "json",
+    })
+
+    //update card
+    if($(mainCard).find('.labelList').length == 0){
+      $(mainCard).prepend($('<div/>').addClass('labels').append(
+        $('<ul/>').addClass('labelList').append(
+          $('<li/>').attr('id', $(this).attr('id'))[0]
+        )
+      )
+    )}
+    else{
+      $(mainCard).find('.labelList')[0].prepend($('<li/>').attr('id', $(this).attr('id'))[0]);
+    }
+    $(this).parent().parent().parent().siblings('.modal-main').children('.cardDetails').children().remove();
+    $(this).parent().siblings().css('display', 'block');
+    $(this).parent().remove();
+    displayCardInfo(mainCard);
+  })
+
+  //delete card
+  $(main_modal).on('click', '#deleteCard', function(){
+    var listId = $(mainCard).parent().parent().attr('id');
     //update map and api
     for(list in map){
       if(list === listId){
         var cards = map[list].cards;
         for(cardIndex in cards){
-          if(cards[cardIndex]._id === $(card).attr('id')){
+          if(cards[cardIndex]._id === $(mainCard).attr('id')){
+            var index = cardIndex;
             var deleteJson = $.ajax({
               url: "http://thiman.me:1337/npadrid/list/" + listId + "/card/" + cards[cardIndex]._id,
               type: "DELETE"
             })
             deleteJson.done(function(){
-              cards.splice(cardIndex, 1);
+              cards.splice(index, 1);
             })
           }
         }
@@ -277,12 +422,10 @@ function deleteCard(card){
     }
 
     //update cardList
-    $(card).parent().children('#' + $(card).attr('id')).remove();
+    $(mainCard).parent().children('#' + $(mainCard).attr('id')).remove();
 
     $(modal).parent().parent().children().css('display','none');
     $(listOfLists).parent().css('z-index', '5');
     $(modal).children('.cardDetails').children().remove();
-    $(this).remove();
-    $(modal).siblings('.modal-sidebar').children('.actionOptions').append($('<p/>').attr('id', 'deleteCard').html('Delete Card'));
-  })
-}
+  });
+})
