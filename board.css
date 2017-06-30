@@ -624,13 +624,26 @@ nav {
   border: #E2E4E6 solid 1px;
 }
 
+#currentMembers {
+  border: #D6DADC solid 2px;
+  height: 15px;
+  border-radius: 3px;
+  padding: 8px;
+  margin: 5px;
+  text-align: center;
+}
+
+#currentMembers:hover {
+  background: #D6DADC;
+}
+
 #newMemberBtn {
   float: right;
   background: #61BD4F;
   padding: 5px 10px;
   border-radius: 3px;
   color: white;
-  margin-top: 8px;
+  margin-top: 3px;
 }
 
 #availableLabels {
