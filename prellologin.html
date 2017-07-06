@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<link rel="stylesheet" href="reg-login.css">
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<link rel="stylesheet" href="public/stylesheets/reg-login.css">
 </head>
 <body>
-	<form class="createContainer">
+	<div class="createContainer">
 		<h1>Create a Prello Account</h1>
 			<label class="labels">Username</label><br>
-			<input type="text" placeholder="e.g., user_name" name="username" required><br>
+			<input type="text" id="username" placeholder="e.g., user_name" name="username" required><br>
 			<label class="labels">Email</label><br>
-			<input type="email" placeholder="e.g., abc@gmail.com" name="email" required><br>
+			<input type="email" id="email" placeholder="e.g., abc@gmail.com" name="email" required><br>
 			<label class="labels">Password</label><br>
 			<input type="password" id="password" placeholder="e.g., .........." name="password" required><br>
 			<label class="labels">Confirm Password</label><br>
 			<input type="password" id="confirm_password" placeholder="e.g., .........." required><br>
 			<button type="submit" id="submit">Create Acount</button>
-	</form>
+	</div>
 
 	<form class="logInContainer">
 		<h1>Log in to Prello</h1>
@@ -26,6 +27,6 @@
 			<input type="checkbox">Remember Me</input>
 			<button type="button" id="login">Log In</button>
 	</form>
-	<script src="login.js"></script>
+	<script src="public/javascripts/login.js"></script>
 </body>
 </html>

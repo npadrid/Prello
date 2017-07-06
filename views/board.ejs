@@ -1,29 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-	<link rel="stylesheet" href="public/stylesheets/board.css">
-</head>
-<body>
-	<nav>
-		<ul class="navBar">
-			<li class="board-navbtn">Boards</li>
-			<ul class="boardSideBar">
-				<h3>Personal Boards</h3>
-				<li>Example Board</li>
-				<li>Welcome Board</li>
-			</ul>
-			<li class="search-navbtn"><input type="text" value="Search"></li>
-		</ul>
-		<p id="logo">Prello</p>
-	</nav>
-
+<%- include('header')%>
+<%- include('navbar')%>
 	<div class="infoBar">
 		<span id="boardTitle">Example</span>
 		<span id="showMenu">Show Menu</span>
 		<div class="sideMenu">
 			<h1 id=menuTitle>Menu</h1>
-			<img class="menuClose" src="public/images/close_window.png">
+			<img class="menuClose" src="images/close_window.png">
 			<ul class="options">
 				<li class="addMember"><input type="text" placeholder="Add Members"></li>
 				<li class="activityList">
@@ -43,7 +25,7 @@
 			<div id="addList">
 				<input type="text" id="listTitle" value="Add a list...">
 				<span id="save-btn">Save</span>
-				<img id="cancelList" src="public/images/close_window.png">
+				<img id="cancelList" src="images/close_window.png">
 			</div>
 		</ul>
 	</div>
@@ -51,7 +33,7 @@
 	<div class="modal">
 		<div class="modal-background"></div>
 	  <div class="modal-content">
-			<img id="modal-close" src="public/images/close_window.png">
+			<img id="modal-close" src="images/close_window.png">
 			<div class="modal-header">
 				<input type="text" id="modal-title">
 				<p id="modal-cardLocation"></p>
@@ -82,6 +64,4 @@
 		</div>
 	</div>
 
-	<script src="public/javascripts/board.js"></script>
-</body>
-</html>
+<%- include('footer', {script: "javascripts/board.js"})%>

@@ -1,0 +1,53 @@
+body {
+  font-family: "jaf-facitweb","Helvetica Neue",Arial,sans-serif;
+}
+
+h1 {
+  color: #4d4d4d;
+}
+
+.createContainer {
+  left: 50%;
+  top: 35%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  display: block;
+  width: 425px;
+}
+
+.labels {
+  font-family: Arial;
+}
+
+input[type=text], input[type=email], input[type=password]{
+  width: 400px;
+  padding:1em;
+  border-radius: 5px;
+  border: 1px solid #e8e8e8;
+  margin: 0.8em 0 1em;
+}
+
+#submit {
+  float: right;
+  background: #e2e4e6;
+  color: #8c8c8c;
+  padding: 10px;
+  border-radius: 3px;
+  border: transparent solid 1px;
+}
+
+/*#confirmBtn {
+  position: relative;
+  bottom: -65px;
+  left: 39%;
+  background: #e2e4e6;
+  color: #8c8c8c;
+  padding: 10px 15px;
+  border-radius: 3px;
+  border: transparent solid 1px;
+  text-decoration: none;
+}
+
+#confirmBtn:hover {
+  filter: brightness(80%);
+}*/

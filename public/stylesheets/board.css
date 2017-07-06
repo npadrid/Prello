@@ -1,0 +1,680 @@
+body {
+  font-family: Helvetica;
+  margin: 0;
+  overflow-x: scroll;
+  white-space: nowrap;
+}
+
+nav {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  height: 50px;
+  z-index: 100;
+  background-color: #026AA7;
+  border-bottom: rgba(0,0,0,.15) solid 1px;
+}
+
+#logo {
+  font-size: 32px;
+  display: inline-block;
+  position: absolute;
+  margin: 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-family: "Brush Script Std", "Brush Script MT", cursive;
+}
+
+.navBar {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.board-navbtn {
+  display: inline-block;
+  padding: 5px;
+  margin: 10px 5px;
+  background: #ddd;
+  border-radius: 3px;
+}
+
+.board-navbtn:hover {
+  opacity: 0.7;
+}
+
+.search-navbtn {
+  display: inline-block;
+  padding: 5px;
+  margin: 10px 5px;
+  background: #ddd;
+  border-radius: 3px;
+}
+
+.boardSideBar {
+  list-style-type: none;
+  position: absolute;
+  top: 38px;
+  padding: 5px;
+  background: white;
+  border-right: #E2E4E6 solid 1px;
+  border-bottom: #E2E4E6 solid 1px;
+  display: none;
+}
+
+.boardSideBar h3{
+  color: #959DA1;
+  margin: 0;
+}
+
+.boardSideBar li{
+  padding-top: 10px;
+}
+
+.infoBar {
+  position: fixed;
+  width: 100%;
+  top: 50px;
+  height: 50px;
+  z-index: 10;
+  background-color: rgb(0, 121, 191);
+}
+
+.infoBar span {
+  display: inline-block;
+}
+
+#boardTitle {
+  font-size: 18px;
+  padding-left: 20px;
+  padding-top: 20px;
+  color: white;
+}
+
+#showMenu {
+  position: relative;
+  font-size: 14px;
+  float: right;
+  padding-top: 20px;
+  padding-right: 20px;
+  font-weight: 700;
+  color: white;
+}
+
+#showMenu:hover {
+  font-weight: 400;
+  text-decoration: underline;
+}
+
+.sideMenu {
+  position: absolute;
+  top: 0;
+  margin: 0;
+  padding: 10px;
+  background-color: #e8e8e8;
+  border-left: #E2E4E6 solid 1px;
+  border-bottom: #E2E4E6 solid 1px;
+  right: -100%;
+}
+
+.sideMenu h1 {
+  font-size: 18px;
+  text-align: center;
+  margin: 0;
+  width: 100%;
+  padding-bottom: 10px;
+  border-bottom: #E2E4E6 solid 1px;
+  display: inline-block;
+}
+
+.menuClose {
+  height: 14px;
+  width: 14px;
+  top: 13px;
+  right: 15px;
+  position: absolute;
+  display: inline-block;
+}
+
+.menuClose:hover {
+  filter: brightness(50%);
+}
+
+.options {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+.addMember {
+  border-bottom: #E2E4E6 solid 1px;
+  padding-bottom: 10px;
+}
+
+.options input[type=text] {
+  width: 100%;
+}
+
+.activity {
+  list-style-type: none;
+  padding: 0;
+}
+
+.activity h3{
+  margin: 0;
+  margin-top: 10px;
+}
+
+.activity li{
+  padding: 10px 0;
+  border-bottom: #E2E4E6 solid 1px;
+}
+
+.activity li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.content {
+  position: absolute;
+  bottom: 0;
+  top: 100px;
+  width: 100%;
+  position: fixed;
+  background-color: rgb(0, 121, 191);
+  z-index: 5;
+}
+
+.listOfLists {
+  padding: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  list-style-type: none;
+  bottom: 0;
+  overflow-x: scroll;
+}
+
+.listItem {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  background: #e8e8e8;
+  padding: 10px;
+  border-radius: 3px;
+  margin: 0 10px;
+  position: relative;
+  width: 230px;
+  min-height: 50px;
+}
+
+#cardTitle {
+  width: 230px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  margin-bottom: 8px;
+  font-weight: 700;
+  padding-left: 5px;
+}
+
+::-webkit-input-placeholder{
+  color: black;
+}
+
+.deleteList {
+  height: 14px;
+  width: 14px;
+  top: 14px;
+  right: 15px;
+  position: absolute;
+  display: inline-block;
+}
+
+.deleteList:hover {
+  filter: brightness(50%);
+}
+
+.cardList {
+  padding: 0;
+  margin-bottom: 25px;
+  list-style-type: none;
+  width: 230px;
+  overflow-y: scroll;
+  z-index: 3;
+  max-height: 75%;
+}
+
+.createCard {
+  position: relative;
+  padding: 8px 4px 8px 8px;
+  border: 0;
+  left: 1px;
+  width: 216px;
+  border-radius: 3px;
+}
+
+.card{
+  position: relative;
+  min-height: 30px;
+  width: 100%;
+  display: block;
+  background: white;
+  border-radius: 5px;
+  z-index: 1;
+  margin-bottom: 6px;
+}
+
+#description {
+  position: relative;
+  left: 8px;
+  top: 7px;
+  padding-bottom: 12px;
+}
+
+.labels {
+  position: relative;
+  left: 8px;
+  top: 5px;
+  height: 8px;
+  padding-top: 5px;
+  margin-bottom: 6px;
+}
+
+.labelList {
+  list-style-type: none;
+  padding: 0;
+  height: 8px;
+}
+
+#label-green {
+  background: #61BD4F;
+  border-radius: 15px;
+}
+
+#label-yellow {
+  background: #D9B51C;
+  border-radius: 15px;
+}
+
+#label-red {
+  background: #B04632;
+  border-radius: 15px;
+}
+
+#label-blue {
+  background: #055A8C;
+  border-radius: 15px;
+}
+
+.labelList li{
+  display: inline-block;
+  color: transparent;
+  width: 42px;
+  height: 8px;
+  vertical-align: top;
+  margin-right: 4px;
+}
+
+.userList {
+  padding-bottom: 10px;
+}
+
+.users {
+  position: relative;
+  padding: 0;
+  height: 30px;
+  bottom: 0;
+  right: 5px;
+  top: 5px;
+}
+
+.user{
+  display: inline-block;
+  padding: 5px;
+  background: #D6DADC;
+  border-radius: 3px;
+  float: right;
+  margin-left: 2px;
+}
+
+.addCard {
+  position: absolute;
+  bottom: 0;
+  margin: 5px 10px 10px 0;
+  padding-left: 0;
+  width: 50%;
+  display: block;
+  z-index: 5;
+}
+
+.addCard:hover {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+#add_btn {
+  float: left;
+  background: #61BD4F;
+  padding: 5px 10px;
+  border-radius: 3px;
+  color: white;
+  margin-top: 8px;
+}
+
+#add_btn:hover {
+  filter: brightness(80%);
+}
+
+#cancelCard {
+  height: 15px;
+  width: 15px;
+  float: left;
+  margin-left: 20px;
+  margin-top: 16px;
+}
+
+#cancelCard:hover {
+  filter: brightness(50%);
+}
+
+#addList {
+  position: relative;
+  display: inline-block;
+  background: rgb(0, 121, 191);
+  padding: 10px;
+  border-radius: 5px;
+  margin: 0 10px;
+  position: relative;
+  width: 230px;
+  filter: brightness(80%);
+}
+
+#listTitle{
+  width: 230px;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  display: block;
+  color: white;
+}
+
+#save-btn {
+  float: left;
+  background: #61BD4F;
+  padding: 5px 10px;
+  border-radius: 3px;
+  margin-top: 8px;
+  color: white;
+  display: none;
+}
+
+#save-btn:hover {
+  opacity: 0.5;
+}
+
+#cancelList{
+  height: 15px;
+  width: 15px;
+  bottom: 17px;
+  left: 32%;
+  display: inline-block;
+  position: absolute;
+  display: none;
+}
+
+#cancelList:hover {
+  filter: brightness(50%);
+}
+
+.modal {
+  position: absolute;
+  top: 50px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.modal-background{
+  position: fixed;
+  z-index: 2;
+  margin: 0;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  opacity: 0.5;
+  display: none;
+}
+
+.modal-content {
+  z-index: 3;
+  position: fixed;
+  background-color: #EDEFF0;
+  min-height: 560px;
+  min-width: 730px;
+  border-radius: 5px;
+  display: none;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#modal-close {
+  height: 15px;
+  width: 15px;
+  padding: 10px;
+  top: 0;
+  right: 0;
+  position: absolute;
+}
+
+#modal-close:hover {
+  filter: brightness(50%);
+}
+
+.modal-header {
+  margin: 4px 40px 0 38px;
+  padding: 9pt 9pt 0;
+  position: relative;
+}
+
+#modal-title {
+  display: block;
+  border: none;
+  border-radius: 3px;
+  width: 100%;
+  height: 30px;
+  background: white;
+  font-size: 14px;
+  font-weight: 700;
+  padding-left: 5px;
+  color: #4d4d4d;
+}
+
+::-webkit-input-value{
+  color: #4d4d4d;
+}
+
+#modal-cardLocation {
+  margin: 0;
+  margin-top: 5px;
+  color: #8c8c8c;
+}
+
+.modal-main {
+  float: left;
+  padding: 8px 9pt 9pt;
+  position: relative;
+  width: 546px;
+  height: 518px;
+}
+
+.cardDetails {
+  margin-left: 30px;
+  margin-top: 10px;
+}
+
+.cardDetails h3 {
+  color: #8c8c8c;
+  margin: 0;
+}
+
+.cardDetails ul {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 8px;
+}
+
+#cardMembers {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+#cardMembers li {
+  display: inline-block;
+  padding: 5px;
+  background: #D6DADC;
+  border-radius: 3px;
+  margin-right: 3px;
+}
+
+#cardLabels {
+  display: inline-block;
+  vertical-align: top;
+}
+
+#cardLabels li {
+  height: 30px;
+  width: 35px;
+  display: inline-block;
+  border-radius: 3px;
+  margin-right: 3px;
+}
+
+#editDescription {
+  display: block;
+  width: 470px;
+  border: none;
+  background: transparent;
+  border-radius: 3px;
+  padding: 10px;
+  margin-bottom: 20px;
+  text-decoration: underline;
+}
+
+.comments{
+  display: block;
+  margin-left: 30px;
+}
+
+.modal-sidebar {
+  float: right;
+  padding: 8px 9pt 9pt 0;
+  width: 140px;
+}
+
+.addOptions p {
+  font-size: 14px;
+  background: white;
+  display: block;
+  padding: 5px;
+  padding-top: 8px;
+  border: #E2E4E6 solid 1px;
+  height: 20px;
+  margin: 0;
+  margin-top: 6px;
+  position: relative;
+  font-weight: 700;
+  border-radius: 3px;
+  text-align: center;
+}
+
+.addOptions p:hover {
+  filter: brightness(80%);
+}
+
+#availableMembers {
+  background: white;
+  border-radius: 3px;
+  margin-top: 6px;
+  padding: 5px;
+  padding-top: 8px;
+  padding-bottom: 42px;
+  border: #E2E4E6 solid 1px;
+}
+
+#availableMembers h3 {
+  font-size: 14px;
+  text-align: center;
+  margin: 0;
+  width: 100%;
+  padding-bottom: 10px;
+  color: #8c8c8c;
+  border-bottom: #D6DADC solid 1px;
+}
+
+#newMember {
+  margin-top: 8px;
+  border: #E2E4E6 solid 1px;
+}
+
+#currentMembers {
+  border: #D6DADC solid 2px;
+  height: 15px;
+  border-radius: 3px;
+  padding: 8px;
+  margin: 5px;
+  text-align: center;
+}
+
+#currentMembers:hover {
+  background: #D6DADC;
+}
+
+#newMemberBtn {
+  float: right;
+  background: #61BD4F;
+  padding: 5px 10px;
+  border-radius: 3px;
+  color: white;
+  margin-top: 3px;
+}
+
+#availableLabels {
+  margin-top: 5px;
+  background: white;
+  border-radius: 3px;
+  padding: 5px;
+}
+
+#availableLabels div{
+  height: 30px;
+  border-radius: 3px;
+  margin: 10px 5px;
+}
+
+.actionOptions p {
+  font-size: 14px;
+  background: white;
+  display: block;
+  padding: 5px;
+  padding-top: 8px;
+  border: #E2E4E6 solid 1px;
+  height: 20px;
+  margin: 0;
+  margin-top: 6px;
+  position: relative;
+  font-weight: 700;
+  border-radius: 3px;
+  text-align: center;
+}
+
+.actionOptions p:hover {
+  filter: brightness(80%);
+}

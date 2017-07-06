@@ -1,0 +1,14 @@
+<%- include('header')%>
+	<form class="createContainer" method="post" action="/user">
+		<h1>Create a Prello Account</h1>
+			<label class="labels">Username</label><br>
+			<input type="text" id="username" placeholder="e.g., user_name" name="username" required><br>
+			<label class="labels">Email</label><br>
+			<input type="email" id="email" placeholder="e.g., abc@gmail.com" name="email" required><br>
+			<label class="labels">Password</label><br>
+			<input type="password" id="password" placeholder="e.g., .........." name="password" required><br>
+			<label class="labels">Confirm Password</label><br>
+			<input type="password" id="confirm_password" placeholder="e.g., .........." required><br>
+			<button type="submit" id="submit">Create Acount</button>
+	</form>
+<%- include('footer', {script: "javascripts/createAccount.js"})%>

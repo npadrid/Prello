@@ -1,0 +1,11 @@
+<%- include('header')%>
+	<form class="logInContainer" method="post" action="/login">
+		<h1>Log in to Prello</h1>
+			<label class="labels">Username</label><br>
+			<input type="text" id="username" placeholder="e.g., user_name" name="username" required><br>
+			<label class="labels">Password</label><br>
+			<input type="password" id="password" placeholder="e.g., .........." name="password" required><br>
+			<input type="checkbox">Remember Me</input>
+			<button type="submit" id="login">Log In</button>
+	</form>
+<%- include('footer', {script: "javascripts/login.js"})%>
