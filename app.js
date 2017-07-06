@@ -64,6 +64,7 @@ app.use(function(req, res, next){
 
 app.use(cors());
 app.use('/', createAccount);
+app.use('/createAccount', createAccount);
 app.use('/login', login);
 app.use('/user', user);
 app.use('/boards', boards);

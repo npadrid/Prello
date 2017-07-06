@@ -5,7 +5,6 @@ var Board = require('../models/board');
 var List = require('../models/list');
 var Card = require('../models/cards');
 var cors = require('cors');
-var session = require('client-sessions');
 
 var router = express.Router();
 
@@ -16,26 +15,6 @@ router.get('/', function(req, res) {
     if(err) return console.error(err);
     res.json(users);
   })
-});
-
-//create user
-router.post('/', function(req, res) {
-  console.log('creating user');
-  console.log(req.body);
-  var newUser = new User(
-    { username: req.body.username,
-      email: req.body.email,
-      password: req.body.password,
-      boards: req.body.boards
-    }
-  );
-  newUser.save(function (err, user) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.redirect('/login');
-    }
-  });
 });
 
 //delete user
