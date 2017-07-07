@@ -17,14 +17,14 @@ var list = require('./routes/list');
 
 var User = require('./models/user');
 
-mongoose.connect('mongodb://localhost/Prello');
+//mongoose.connect('mongodb://localhost/Prello');
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log('connected!');
 });
-
+require('./db');
 var app = express();
 
 // view engine setup
@@ -48,14 +48,13 @@ app.use(session({
 
 app.use(function(req, res, next){
   if(req.session && req.session.user){
-    User.findOne({username: req.session.user.username}, function(err, user){
-      if(user) {
-        req.user = user;
-        delete req.user.password;
-        req.session.user = user;
-      }
+    // User.findOne({username: req.session.user.username}, function(err, user){
+    //   if(user) {
+    //     req.user = user;
+    //     delete req.user.password;
+    //     req.session.user = user;
+    //   }
       next();
-    });
   }
   else {
     next();
