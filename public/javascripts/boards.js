@@ -1,66 +1,58 @@
 var listOfBoards;
+var navbar;
+
 $('.board-navbtn').click(function(){
   $('.boardSideBar').toggle('fast');
 })
 
-var getJson = $.ajax({
-    url: "http://localhost:3000/user/boards",
-    type: "GET",
-    dataType : "json",
+$('#userBtn').click(function(){
+  $(this).parent().append($('<div/>').addClass('settings').append(
+    $('<img/>').attr({id: 'closeSettings', src: 'images/close_window.png'}),
+    $('<a/>').attr({id: 'logout', href: '/logout'}).html('Logout')
+  ));
 })
-.done(function (getJson) {
-  // for(var i = 0; i < getJson.length; i++){
-  //   //make map
-  //   map[getJson[i]._id] = {title: getJson[i].title, cards: getJson[i].cards};
-  // }
-  console.log(getJson);
-  //preload data
-  listOfBoards = $('.listOfBoards');
-  //loadData();
-})
-//
-// function loadData(){
-//   var addListIndex = 0;
-//   for(list in map){
-//     //make lists
-//     var listItem = $('<li/>').addClass('listItem');
-//     listOfLists.children()[addListIndex].before(listItem[0]);
-//     var newCardList = createList(list, map[list].title, listItem);
-//     addListIndex++;
-//
-//     //make cards
-//     var cards = map[list].cards;
-//     for(cardIndex in cards){
-//       var card = cards[cardIndex];
-//       var newCard = createCard(card._id, card.description, newCardList);
-//       if(card.labels.length > 0){
-//         addLabelList(newCard, card.labels);
-//       }
-//       if(card.users.length > 0){
-//         addMemberList(newCard, card.users);
-//       }
-//     }
-//   }
-// }
-//
-// function createBoard(id, title, listItem){
-//   listItem.attr('id', id);
-//   var cardTitle = $('<input>').attr({type: "text", id: "cardTitle", value: title});
-//   var deleteList_btn = $('<img class="deleteList">').attr('src', 'images/close_window.png')[0];
-//   var newCardList = $('<ul/>').addClass("cardList");
-//   var addCard_btn = $('<p/>').addClass("addCard").html("Add a card...")[0];
-//
-//   listItem.append(cardTitle, deleteList_btn, newCardList, addCard_btn);
-//   return newCardList;
-// }
-// $('#addBoard').click(function(){
-//   $(this).parent().append($('<li/>'))
-// })
 
-// function createBoardForm(list) {
-//   var boardInfo = document.createElement('textarea');
-//   boardInfo.className = "createBoard";
-//   var addCard_btn = $('<span/>').attr('id', 'add_btn').html('Add')[0];
-//   var cancelCard_btn = $('<img id="cancelCard">').attr('src', 'images/close_window.png')[0];
-//   list.append(cardInfo, addCard_btn, cancelCard_btn);
-// }
+$(function() {
+  listOfBoards = $('.listOfBoards');
+  navbar = $('.navBar');
+
+  $(navbar).on('click', '#closeSettings', function(){
+    $(navbar).children('.settings').remove();
+  });
+
+  $(listOfBoards).on('click', '#addBoard', function(){
+    //add header
+    var boardInfo = document.createElement('textarea');
+    boardInfo.className = "boardInfo";
+    var createBtn = $('<span/>').attr('id', 'create_btn').html('Create');
+    var cancelBoard = $('<img id="cancelBoard">').attr('src', 'images/close_window.png');
+    $(this).parent().append($('<div/>').addClass('boardForm').append(boardInfo, createBtn, cancelBoard));
+    $(this).remove();
+  });
+
+  $(listOfBoards).on('click', '#cancelBoard', function(){
+    $(this).parent().parent().children('.boardForm').remove();
+    $(listOfBoards).append($('<div/>').attr('id', 'addBoard').html('Create new board...'));
+  });
+
+  $(listOfBoards).on('click', '#create_btn', function(){
+    var postJson = $.post("http://localhost:3000/boards",
+      {'title': $(this).siblings('.boardInfo').val()}
+    );
+    postJson.done(function(data){
+      var boardItem = $('<li/>').addClass('board').attr('id', data._id).html(data.title);
+      var lastIndex = $(listOfBoards).children('#welcomeBoard').index();
+      $(listOfBoards).children()[lastIndex-1].after(boardItem[0]);
+      $(listOfBoards).children('.boardForm').remove();
+      $(listOfBoards).append($('<div/>').attr('id', 'addBoard').html('Create new board...'));
+    })
+  })
+
+  $(listOfBoards).on('click', '.board', function(){
+    var getJson = $.ajax({
+        url: "http://localhost:3000/boards/" + $(this).attr('id'),
+        type: "GET",
+        dataType : "json"
+    })
+  })
+})

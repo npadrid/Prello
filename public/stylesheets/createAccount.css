@@ -35,19 +35,3 @@ input[type=text], input[type=email], input[type=password]{
   border-radius: 3px;
   border: transparent solid 1px;
 }
-
-/*#confirmBtn {
-  position: relative;
-  bottom: -65px;
-  left: 39%;
-  background: #e2e4e6;
-  color: #8c8c8c;
-  padding: 10px 15px;
-  border-radius: 3px;
-  border: transparent solid 1px;
-  text-decoration: none;
-}
-
-#confirmBtn:hover {
-  filter: brightness(80%);
-}*/

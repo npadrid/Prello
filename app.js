@@ -10,9 +10,9 @@ var session = require('client-sessions');
 
 var createAccount = require('./routes/createAccount');
 var login = require('./routes/login');
+var logout = require('./routes/logout')
 var user = require('./routes/user');
 var boards = require('./routes/boards');
-var board = require('./routes/board');
 var list = require('./routes/list');
 
 var User = require('./models/user');
@@ -43,7 +43,8 @@ app.use(session({
   cookieName: 'session',
   secret: '0GBlJZ9EKBt2Zbi2flRPvztczCewBxXK',
   duration: 60*60*1000, // 1 hr
-  activeDuration: 5*60*1000 //5 min
+  activeDuration: 5*60*1000, //5 min
+  ephemeral: true
 }))
 
 app.use(function(req, res, next){
@@ -66,9 +67,9 @@ app.use(cors());
 app.use('/', createAccount);
 app.use('/createAccount', createAccount);
 app.use('/login', login);
+app.use('/logout', logout)
 app.use('/user', user);
 app.use('/boards', boards);
-app.use('/board', board);
 app.use('/list', list);
 
 // catch 404 and forward to error handler

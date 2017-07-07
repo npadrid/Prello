@@ -27,6 +27,55 @@ nav {
   font-family: "Brush Script Std", "Brush Script MT", cursive;
 }
 
+#userBtn {
+  font-family: "jaf-facitweb","Helvetica Neue",Arial,sans-serif;
+  background: #e2e4e6;
+  color: black;
+  padding: 7px;
+  border-radius: 3px;
+  float: right;
+  text-decoration: none;
+  margin: 10px 5px;
+}
+
+#userBtn:hover {
+  filter: brightness(90%);
+}
+
+.settings {
+  position: absolute;
+  right: 0;
+  top: 51px;
+  padding: 10px;
+  border: 1px solid #D6DADC;
+}
+
+#closeSettings {
+  height: 10px;
+  width: 10px;
+  margin: 8px;
+  margin-top: 0;
+  right: 0;
+  position: absolute;
+  display: inline-block;
+}
+
+#closeSettings:hover {
+  filter: brightness(70%);
+}
+
+#logout {
+  margin-top: 20px;
+  margin-right: 25px;
+  display: inline-block;
+  color: black;
+  text-decoration: none;
+}
+
+#logout:hover {
+  font-weight: 400;
+}
+
 .navBar {
   list-style: none;
   margin: 0;

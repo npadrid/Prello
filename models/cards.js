@@ -1,10 +1,10 @@
 var mongoose = require('mongoose');
 var cardSchema = mongoose.Schema({
   //title: String,
+  author: String,
   labels: Array,
   description: String,
   users: Array
-  //author: String,
   //comments: Array
 })
 

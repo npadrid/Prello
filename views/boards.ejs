@@ -2,8 +2,10 @@
 <%- include('navbar')%>
 	<ul class="listOfBoards">
 		<h1>Personal Boards</h1>
-		<li>Example Board</li>
-		<li>Welcome Board</li>
-		<li id="addBoard">Create new board...</li>
+		<% boards.forEach(function(board) { %>
+			<a class='board' id="<%=board._id%>" href="/boards/<%=board._id%>"><%= board.title %></a>
+		<% }); %>
+		<li class='board' id="welcomeBoard">Welcome Board</li>
+		<div id="addBoard">Create new board...</div>
 	</ul>
 <%- include('footer', {script: "javascripts/boards.js"})%>

@@ -5,7 +5,7 @@
 		<span id="showMenu">Show Menu</span>
 		<div class="sideMenu">
 			<h1 id=menuTitle>Menu</h1>
-			<img class="menuClose" src="images/close_window.png">
+			<img class="menuClose" src="../images/close_window.png">
 			<ul class="options">
 				<li class="addMember"><input type="text" placeholder="Add Members"></li>
 				<li class="activityList">
@@ -25,7 +25,7 @@
 			<div id="addList">
 				<input type="text" id="listTitle" value="Add a list...">
 				<span id="save-btn">Save</span>
-				<img id="cancelList" src="images/close_window.png">
+				<img id="cancelList" src="../images/close_window.png">
 			</div>
 		</ul>
 	</div>
@@ -33,7 +33,7 @@
 	<div class="modal">
 		<div class="modal-background"></div>
 	  <div class="modal-content">
-			<img id="modal-close" src="images/close_window.png">
+			<img id="modal-close" src="../images/close_window.png">
 			<div class="modal-header">
 				<input type="text" id="modal-title">
 				<p id="modal-cardLocation"></p>
@@ -64,4 +64,4 @@
 		</div>
 	</div>
 
-<%- include('footer', {script: "javascripts/board.js"})%>
+<%- include('footer', {script: "../javascripts/board.js"})%>
