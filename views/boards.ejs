@@ -3,7 +3,7 @@
 	<ul class="listOfBoards">
 		<h1>Personal Boards</h1>
 		<% boards.forEach(function(board) { %>
-			<a class='board' id="<%=board._id%>" href="/boards/<%=board._id%>"><%= board.title %></a>
+			<a class='board' href="/boards/<%=board._id%>"><%= board.title %></a>
 		<% }); %>
 		<li class='board' id="welcomeBoard">Welcome Board</li>
 		<div id="addBoard">Create new board...</div>

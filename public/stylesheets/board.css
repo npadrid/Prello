@@ -727,3 +727,35 @@ nav {
 .actionOptions p:hover {
   filter: brightness(80%);
 }
+
+#comment {
+  min-height: 75px;
+  margin-left: 30px;
+  padding: 9px 11px 0;
+  width: 90%;
+  border: 0;
+}
+
+#addComment {
+  float: right;
+  background: #e2e4e6;
+  color: #8c8c8c;
+  padding: 10px;
+  margin: 4px;
+  border-radius: 3px;
+  border: transparent solid 1px;
+}
+
+.activity h3 {
+  color: #8c8c8c;
+  margin-top: 32px;
+  margin-left: 30px;
+}
+
+.cardActivity {
+  border-bottom: #E2E4E6 solid 1px;
+}
+.cardActivity p {
+  margin: 5px;
+  margin-left: 30px;
+}
