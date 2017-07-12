@@ -40,19 +40,11 @@ $(function() {
       {'title': $(this).siblings('.boardInfo').val()}
     );
     postJson.done(function(data){
-      var boardItem = $('<li/>').addClass('board').attr('id', data._id).html(data.title);
+      var boardItem = $('<a/>').addClass('board').attr('href', "/boards/"+data._id).html(data.title);
       var lastIndex = $(listOfBoards).children('#welcomeBoard').index();
       $(listOfBoards).children()[lastIndex-1].after(boardItem[0]);
       $(listOfBoards).children('.boardForm').remove();
       $(listOfBoards).append($('<div/>').attr('id', 'addBoard').html('Create new board...'));
-    })
-  })
-
-  $(listOfBoards).on('click', '.board', function(){
-    var getJson = $.ajax({
-        url: "http://localhost:3000/boards/" + $(this).attr('id'),
-        type: "GET",
-        dataType : "json"
     })
   })
 })

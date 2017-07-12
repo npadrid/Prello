@@ -197,9 +197,26 @@ nav {
     margin-bottom: 0;
 }
 
-.addMember {
+.options-addMember {
   border-bottom: #E2E4E6 solid 1px;
   padding-bottom: 10px;
+}
+
+#options-newMember {
+  padding: 10px;
+  display: inline-block;
+  width: 210px;
+  margin-right: 12px;
+  border: 0;
+  border-radius: 3px;
+}
+
+#options-addMember-btn {
+  display: inline-block;
+  padding: 5px;
+  border: black solid 1px;
+  border-radius: 3px;
+  margin: 0;
 }
 
 .options input[type=text] {
@@ -317,7 +334,7 @@ nav {
   margin-bottom: 6px;
 }
 
-#description {
+#title {
   position: relative;
   left: 8px;
   top: 7px;
@@ -746,7 +763,11 @@ nav {
   border: transparent solid 1px;
 }
 
-.activity h3 {
+.modal-activity {
+  overflow-y: scroll;
+  height: 300px;
+}
+#modal-activity-header {
   color: #8c8c8c;
   margin-top: 32px;
   margin-left: 30px;

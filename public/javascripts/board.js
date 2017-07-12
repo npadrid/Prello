@@ -29,6 +29,24 @@ $('#userBtn').click(function(){
   ));
 })
 
+$('#options-addMember-btn').click(function(){
+  var user = $(this).siblings('#options-newMember').val();
+  var postJson = $.post("http://localhost:3000/boards/" + bid + "/member",
+    {"user": user}
+  );
+  postJson.done(function(data){
+    if(data == "no user"){
+      alert(`No such user`);
+    }
+    else if(data == "dup user"){
+      alert(user + ' already added')
+    }
+    else {
+      alert('Added ' + user);
+    }
+  })
+});
+
 //get data from api
 var getJson = $.ajax({
     url: "http://localhost:3000/boards/" + bid + "/list",
@@ -58,7 +76,7 @@ function loadData(){
     var cards = map[list].cards;
     for(cardIndex in cards){
       var card = cards[cardIndex];
-      var newCard = createCard(card._id, card.description, newCardList);
+      var newCard = createCard(card._id, card.title, newCardList);
       if(card.hasOwnProperty('labels') && card.labels.length > 0){ //card.labels.length > 0
         addLabelList(newCard, card.labels);
       }
@@ -79,13 +97,11 @@ function createList(id, title, listItem){
   listItem.append(cardTitle, deleteList_btn, newCardList, addCard_btn);
   return newCardList;
 }
-
-function createCard(id, description, cardList){
+function createCard(id, title, cardList){
   var card = $('<li/>').addClass('card').attr('id', id);
-  var cardDescription = $('<div/>').attr('id', 'description').html(description);
-
+  var cardTitle = $('<div/>').attr('id', 'title').html(title);
   cardList.append(card);
-  card.append(cardDescription);
+  card.append(cardTitle);
   return card;
 }
 
@@ -113,27 +129,19 @@ $(function() {
     $(this).toggle();
     $(cardList).css('margin-bottom','0px');
   });
-
   //Save card button
   $(listOfLists).on('click', '#add_btn', function(){
     var cardList = $(this).parent();
     var listItemId = $(cardList).parent().attr('id');
-    var cardDescription = $(this).siblings('.createCard')[0].value;
+    var cardTitle = $(this).siblings('.createCard')[0].value;
 
     //update map and api
     var postJson = $.post("http://localhost:3000/boards/" + bid + "/list/" + listItemId +  "/card",
-      {"description": cardDescription, "labels": [], "users": [], "comments": []}
+      {"title": cardTitle}
     );
     postJson.done(function(data){
-      var cardId = data._id;
-      createCard(cardId, cardDescription, cardList);
-      map[listItemId].cards.push({
-        "description" : cardDescription,
-        'labels': [],
-        "users":[],
-        "comments": [],
-        "_id": cardId
-      })
+      createCard(data._id, cardTitle, cardList);
+      map[listItemId].cards.push(data)
     })
 
     cardList.children('.createCard').remove();
@@ -142,7 +150,6 @@ $(function() {
     $(cardList).css('margin-bottom','25px');
     $(cardList).parent().find('.addCard').toggle();
   });
-
   //Cancel add card
   $(listOfLists).on('click', '#cancelCard', function(){
     var cardList = $(this).parent();
@@ -195,7 +202,6 @@ $('#listTitle').click(function(){
   $(this).siblings('#save-btn').css('display','block');
   $(this).siblings('#cancelList').css('display','inline-block');
 })
-
 $('#save-btn').click(function(){
   //make individual list
   var listItem = $('<li/>').addClass('listItem');
@@ -217,7 +223,6 @@ $('#save-btn').click(function(){
   $(this).siblings('#listTitle').css('color', 'white');
   $(this).parent().css('filter', 'brightness(80%)');
 })
-
 $('#cancelList').click(function(){
   $(this).css('display','none');
   $(this).siblings('#save-btn').css('display','none');
@@ -237,7 +242,7 @@ function displayCardInfo(card){
   for(cardIndex in listObj.cards){
     var card = listObj.cards[cardIndex];
     if (card._id === cardId){
-      modal.siblings('.modal-header').children('#modal-title').attr({value: card.description});
+      modal.siblings('.modal-header').children('#modal-title').attr({value: card.title});
       if(card.hasOwnProperty('users') && card.users.length > 0){
         var cardMembers = $('<div/>').attr('id', 'cardMembers');
         modal_detail.append(cardMembers[0]);
@@ -264,18 +269,18 @@ function displayCardInfo(card){
       if(card.hasOwnProperty('comments') && card.comments.length > 0){
         for(var x = 0; x < card.comments.length; x++){
           var comment = card.comments[x];
-          $('.activity').append(
+          $('.modal-activity').append(
             $('<div/>').addClass('cardActivity').append(
               $('<p/>').addClass('commentUser').html(comment.author + ": "),
               $('<p/>').addClass('commentContent').html(comment.content),
-              $('<p/>').addClass('commentDate').html(comment.date + " at " + comment.time)
+              $('<p/>').addClass('commentDate').html(comment.postDate + " at " + comment.postTime)
             )
           )
         }
       }
     }
   }
-    $(modal).children('.cardDetails').append($('<input>').attr({type: "text", id: "editDescription", value: 'Edit the description...'}));
+  $(modal).children('.cardDetails').append($('<input>').attr({type: "text", id: "editDescription", value: 'Edit the description...'}));
 }
 
 $('.modal-background').click(function(){
@@ -284,20 +289,19 @@ $('.modal-background').click(function(){
   var main = $(this).siblings('.modal-content').children('.modal-main');
   var sidebar = $(this).siblings('.modal-content').children('.modal-sidebar');
   $(main).children('.cardDetails').children().remove();
-  $(main).children('.activity').children('.cardActivity').remove();
+  $(main).children('.modal-activity').children('.cardActivity').remove();
   $(main).children('.commentBox').children('#comment').val('');
   $(this).siblings('.modal-content').find('.addOptions').children().css('display', 'block');
   $(sidebar).children('.addOptions').children('#availableMembers').remove();
   $(sidebar).children('.addOptions').children('#availableLabels').remove();
 })
-
 $('#modal-close').click(function(){
   $(this).parent().parent().children().css('display','none');
   $(listOfLists).parent().css('z-index', '5');
   var main = $(this).siblings('.modal-main');
   var options = $(this).siblings('.modal-sidebar').children('.addOptions');
   $(main).children('.cardDetails').children().remove();
-  $(main).children('.activity').children('.cardActivity').remove();
+  $(main).children('.modal-activity').children('.cardActivity').remove();
   $(main).children('.commentBox').children('#comment').val('');
   $(options).children().css('display', 'block');
   $(options).children('#availableMembers').remove();
@@ -321,28 +325,26 @@ $(function(){
   $(main_modal).on('click', '#newMemberBtn', function(){
     var listObj = map[$(mainCard).parent().parent().attr('id')];
     var cardId = $(mainCard).attr('id');
-    var cardLabels;
-    var cardDescription;
-    var cardUsers;
+    var card;
     //update map
     for(cardIndex in listObj.cards){
       var currentCard = listObj.cards[cardIndex];
       if (currentCard._id === cardId){
-        currentCard.users.push($(this).siblings('#newMember').val());
+        if(currentCard.hasOwnProperty('users')){
+          currentCard.users.push($(this).siblings('#newMember').val());
+        }
+        else{
+          currentCard.users = [$(this).siblings('#newMember').val()];
+        }
+        card = currentCard;
         break;
       }
     }
-    cardLabels = currentCard.labels;
-    cardDescription = currentCard.description;
-    cardUsers = currentCard.users;
     // //update api
     var patchJson = $.ajax({
         url: "http://localhost:3000/boards/" + bid + "/list/" + $(mainCard).parent().parent().attr('id') + "/card/" + cardId,
         type: "PATCH",
-        data: {"labels": cardLabels,
-        "description": cardDescription,
-        "users": cardUsers,
-        "_id": cardId},
+        data: {card},
         dataType : "json",
     })
 
@@ -376,28 +378,26 @@ $(function(){
   $(main_modal).on('click', '.modal_label', function(){
     var listObj = map[$(mainCard).parent().parent().attr('id')];
     var cardId = $(mainCard).attr('id');
-    var cardLabels;
-    var cardDescription;
-    var cardUsers;
+    var card;
     //update map
     for(cardIndex in listObj.cards){
       var currentCard = listObj.cards[cardIndex];
       if (currentCard._id === cardId){
-        currentCard.labels.push($(this).attr('id'));
+        if(currentCard.hasOwnProperty('labels')){
+          currentCard.labels.push($(this).attr('id'));
+        }
+        else{
+          currentCard.labels = [$(this).attr('id')];
+        }
+        card = currentCard;
         break;
       }
     }
-    cardLabels = currentCard.labels;
-    cardDescription = currentCard.description;
-    cardUsers = currentCard.users;
     //update api
     var patchJson = $.ajax({
         url: "http://localhost:3000/boards/" + bid + "/list/" + $(mainCard).parent().parent().attr('id') + "/card/" + cardId,
         type: "PATCH",
-        data: {"labels": cardLabels,
-        "description": cardDescription,
-        "users": cardUsers,
-        "_id": cardId},
+        data: {card},
         dataType : "json",
     })
     //update card
@@ -429,30 +429,37 @@ $(function(){
     var postJson = $.ajax({
         url: "http://localhost:3000/boards/" + bid + "/list/" + $(mainCard).parent().parent().attr('id') + "/card/" + $(mainCard).attr('id') + "/comment",
         type: "POST",
-        data: {'content': content, date: currentTime},
+        data: {'content': content, 'date': date, 'time': time},
         dataType : "json",
-    })
+    });
     postJson.done(function(data){
       //update card modal
       for(cardIndex in listObj.cards){
         var currentCard = listObj.cards[cardIndex];
         if (currentCard._id === cardId){
-          currentCard.comments.push({author: data.author, content: data.content, date: date, time: time});
+          if(currentCard.hasOwnProperty('comments')){
+            currentCard.comments.push({author: data.author, content: data.content, postDate: date, postTime: time});
+          }
+          else{
+            currentCard.comments = [{author: data.author, content: data.content, postDate: date, postTime: time}];
+          }
           break;
         }
       }
-      $('.activity').append(
+      $('.modal-activity').append(
         $('<div/>').addClass('cardActivity').append(
           $('<p/>').addClass('commentUser').html(data.author + ": "),
           $('<p/>').addClass('commentContent').html(data.content),
-          $('<p/>').addClass('commentDate').html(date + " at " + time)
+          $('<p/>').addClass('commentDate').html(data.postDate + " at " + data.postTime)
         )
       )
     });
     $(this).parent().siblings('.cardDetails').children().remove();
+    $(this).parent().siblings('.modal-activity').children('.cardActivity').remove();
     $('#comment').val('');
     displayCardInfo(mainCard);
   })
+
   //delete card
   $(main_modal).on('click', '#deleteCard', function(){
     var listId = $(mainCard).parent().parent().attr('id');
@@ -462,19 +469,15 @@ $(function(){
         var cards = map[list].cards;
         for(cardIndex in cards){
           if(cards[cardIndex]._id === $(mainCard).attr('id')){
-            var index = cardIndex;
             var deleteJson = $.ajax({
               url: "http://localhost:3000/boards/" + bid + "/list/" + listId + "/card/" + cards[cardIndex]._id,
               type: "DELETE"
             })
-            deleteJson.done(function(){
-              cards.splice(index, 1);
-            })
+            cards.splice(cardIndex, 1);
           }
         }
       }
     }
-
     //update cardList
     $(mainCard).parent().children('#' + $(mainCard).attr('id')).remove();
 
