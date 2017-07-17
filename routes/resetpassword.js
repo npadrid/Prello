@@ -10,15 +10,12 @@ router.get('/:eid', function(req,res){
 })
 
 router.post('/:eid', function(req, res){
-  console.log(req.body);
   if(req.body.password !== req.body.confirm_password) {
     res.render('resetpassword', { title: 'Reset Password', href: "../stylesheets/resetpassword.css", message: 'Passwords do not match', link: req.params.eid});
   }
   else {
     Email.findOne({_id: req.params.eid}, function(err, email){
-      console.log(email);
       User.findOne({username: email.username}, function(err, user){
-        console.log(user);
         var newUser = new User({
           username: user.username,
           email: user.email,
