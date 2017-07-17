@@ -15,15 +15,22 @@ router.post('/',function(req, res){
       res.render('login', {title: 'Log In', href: "stylesheets/login.css", error: 'Invalid username or password'});
     }
     else {
-      if(req.body.password == user.password){
-        req.session.user = user;
-        res.redirect('/boards');
-      }
-      else {
-        res.render('login', {title: 'Log In', href: "stylesheets/login.css", error:'Invalid username or password'});
-      }
+      user.comparePassword(req.body.password, function(err, isMatch){
+        if (err) {
+          console.log(err);
+        }
+        else{
+          if(isMatch){
+            req.session.user = user;
+            res.redirect('/boards');
+          }
+          else{
+            res.render('login', {title: 'Log In', href: "stylesheets/login.css", error:'Invalid username or password'});
+          }
+        }
+      });
     }
-  })
+  });
 });
 
 module.exports = router;

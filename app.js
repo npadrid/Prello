@@ -13,6 +13,9 @@ var login = require('./routes/login');
 var logout = require('./routes/logout')
 var user = require('./routes/user');
 var boards = require('./routes/boards');
+var forgotpw = require('./routes/forgotpassword');
+var emailLink = require('./routes/emailLink');
+var resetpw = require('./routes/resetpassword');
 
 var User = require('./models/user');
 
@@ -66,6 +69,9 @@ app.use(cors());
 app.use('/', createAccount);
 app.use('/createAccount', createAccount);
 app.use('/login', login);
+app.use('/forgotpassword', forgotpw);
+app.use('/emailLink', emailLink);
+app.use('/resetpassword', resetpw);
 app.use('/logout', logout)
 app.use('/user', user);
 app.use('/boards', boards);
