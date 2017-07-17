@@ -1,3 +1,4 @@
+var navbar;
 var listOfLists;
 var modal;
 var main_modal;
@@ -42,11 +43,19 @@ $('.menuClose').click(function(){
   $('.sideMenu').animate({'right':'-100%'}, 300);
 })
 $('#userBtn').click(function(){
+  $('.settings').remove();
   $(this).parent().append($('<div/>').addClass('settings').append(
     $('<img/>').attr({id: 'closeSettings', src: '../images/close_window.png'}),
     $('<a/>').attr({id: 'logout', href: '/logout'}).html('Logout')
   ));
 })
+
+$(function(){
+  navbar = $('.navBar');
+  $(navbar).on('click', '#closeSettings', function() {
+    $('.settings').remove();
+  });
+});
 $('#options-addMember-btn').click(function(){
   var user = $(this).siblings('#options-newMember').val();
   var postJson = $.post("http://localhost:3000/boards/" + bid + "/member",
