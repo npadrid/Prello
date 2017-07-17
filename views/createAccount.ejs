@@ -1,6 +1,7 @@
 <%- include('header')%>
 	<form class="createContainer" method="post" action="/createAccount">
 		<h1>Create a Prello Account</h1>
+		<h4><%= error %></h4>
 			<label class="labels">Username</label><br>
 			<input type="text" id="username" placeholder="e.g., user_name" name="username" required><br>
 			<label class="labels">Email</label><br>

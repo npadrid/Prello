@@ -5,7 +5,7 @@ var router = express.Router();
 
 /* GET login page. */
 router.get('/', function(req, res, next) {
-  res.render('login', { title: 'Log In', href: "stylesheets/login.css"});
+  res.render('login', { title: 'Log In', href: "stylesheets/login.css", error: ''});
 });
 
 //login user

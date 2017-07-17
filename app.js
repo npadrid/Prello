@@ -13,7 +13,6 @@ var login = require('./routes/login');
 var logout = require('./routes/logout')
 var user = require('./routes/user');
 var boards = require('./routes/boards');
-var list = require('./routes/list');
 
 var User = require('./models/user');
 
@@ -70,7 +69,6 @@ app.use('/login', login);
 app.use('/logout', logout)
 app.use('/user', user);
 app.use('/boards', boards);
-app.use('/list', list);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

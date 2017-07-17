@@ -1,4 +1,5 @@
 <%- include('header')%>
+<script src="/socket.io/socket.io.js"></script>
 <%- include('navbar')%>
 	<div class="infoBar">
 		<span id="boardTitle">Example</span>
@@ -7,7 +8,10 @@
 			<h1 id=menuTitle>Menu</h1>
 			<img class="menuClose" src="../images/close_window.png">
 			<ul class="options">
-				<li class="addMember"><input type="text" placeholder="Add Members"></li>
+				<li class="options-addMember">
+					<input id="options-newMember" type="text" placeholder="Add Members">
+					<p id='options-addMember-btn'>Add</p>
+				</li>
 				<li class="activityList">
 					<ul class="activity">
 						<h3>Activity</h3>
@@ -44,8 +48,8 @@
 					<textarea id="comment" placeholder="Write a comment..."></textarea>
 					<div id='addComment'>Send</div>
 	  		</div>
-				<div class="activity">
-					<h3>Activity</h3>
+				<h3 id="modal-activity-header">Activity</h3>
+				<div class="modal-activity">
 				</div>
 			</div>
 			<div class="modal-sidebar">

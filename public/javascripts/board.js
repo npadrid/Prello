@@ -4,30 +4,66 @@ var main_modal;
 var mainCard;
 var map = {};
 var bid = window.location.pathname.split('/')[2];
+var socket = io();
+socket.emit('room', {room: bid, user: $('#userBtn').html()});
+
+socket.on('new list', function(data){
+  var listItem = $('<li/>').addClass('listItem');
+  listOfLists.children()[data.lastIndex].before(listItem[0]);
+  createList(data.data._id, data.data.title, listItem);
+  map[data.data._id] = {title: data.data.title, cards: []};
+})
+socket.on('delete list', function(data){
+  $('#'+data.lid).remove();
+  delete map[data.lid];
+})
+
+socket.on('new card', function(data){
+  createCard(data.card._id, data.card.title, $('#'+data.lid).children('.cardList'));
+  map[data.lid].cards.push(data.card);
+});
+socket.on('delete card', function(data){
+  $('#'+data.cid).remove();
+  map[data.lid].cards.splice(data.index, 1);
+})
+
 var labelColors = ["label-green", "label-yellow", "label-red", "label-blue"];
 
 $('.content').click(function(){
   $('.boardSideBar').hide();
 })
-
 $('.board-navbtn').click(function(){
   $('.boardSideBar').toggle('fast');
 })
-
 $('#showMenu').click(function(){
   $('.sideMenu').animate({'right':'0'}, 300);
 })
-
 $('.menuClose').click(function(){
   $('.sideMenu').animate({'right':'-100%'}, 300);
 })
-
 $('#userBtn').click(function(){
   $(this).parent().append($('<div/>').addClass('settings').append(
     $('<img/>').attr({id: 'closeSettings', src: '../images/close_window.png'}),
     $('<a/>').attr({id: 'logout', href: '/logout'}).html('Logout')
   ));
 })
+$('#options-addMember-btn').click(function(){
+  var user = $(this).siblings('#options-newMember').val();
+  var postJson = $.post("http://localhost:3000/boards/" + bid + "/member",
+    {"user": user}
+  );
+  postJson.done(function(data){
+    if(data == "no user"){
+      alert(`No such user`);
+    }
+    else if(data == "dup user"){
+      alert(user + ' already added')
+    }
+    else {
+      alert('Added ' + user);
+    }
+  })
+});
 
 //get data from api
 var getJson = $.ajax({
@@ -44,7 +80,6 @@ var getJson = $.ajax({
   listOfLists = $('.listOfLists');
   loadData();
 })
-
 function loadData(){
   var addListIndex = 0;
   for(list in map){
@@ -58,7 +93,7 @@ function loadData(){
     var cards = map[list].cards;
     for(cardIndex in cards){
       var card = cards[cardIndex];
-      var newCard = createCard(card._id, card.description, newCardList);
+      var newCard = createCard(card._id, card.title, newCardList);
       if(card.hasOwnProperty('labels') && card.labels.length > 0){ //card.labels.length > 0
         addLabelList(newCard, card.labels);
       }
@@ -79,13 +114,11 @@ function createList(id, title, listItem){
   listItem.append(cardTitle, deleteList_btn, newCardList, addCard_btn);
   return newCardList;
 }
-
-function createCard(id, description, cardList){
+function createCard(id, title, cardList){
   var card = $('<li/>').addClass('card').attr('id', id);
-  var cardDescription = $('<div/>').attr('id', 'description').html(description);
-
+  var cardTitle = $('<div/>').attr('id', 'title').html(title);
   cardList.append(card);
-  card.append(cardDescription);
+  card.append(cardTitle);
   return card;
 }
 
@@ -95,7 +128,6 @@ function addLabelList(card, labels){
     $(card).find('.labelList')[0].append($('<li/>').attr({id: labels[i]})[0]);
   }
 }
-
 function addMemberList(card, users){
   $(card).append($('<div/>').addClass('userList').append($('<ul/>').addClass('users')));
   for (var j = 0; j < users.length; j++){
@@ -113,28 +145,21 @@ $(function() {
     $(this).toggle();
     $(cardList).css('margin-bottom','0px');
   });
-
   //Save card button
   $(listOfLists).on('click', '#add_btn', function(){
     var cardList = $(this).parent();
     var listItemId = $(cardList).parent().attr('id');
-    var cardDescription = $(this).siblings('.createCard')[0].value;
+    var cardTitle = $(this).siblings('.createCard')[0].value;
 
     //update map and api
     var postJson = $.post("http://localhost:3000/boards/" + bid + "/list/" + listItemId +  "/card",
-      {"description": cardDescription, "labels": [], "users": [], "comments": []}
+      {"title": cardTitle}
     );
     postJson.done(function(data){
-      var cardId = data._id;
-      createCard(cardId, cardDescription, cardList);
-      map[listItemId].cards.push({
-        "description" : cardDescription,
-        'labels': [],
-        "users":[],
-        "comments": [],
-        "_id": cardId
-      })
-    })
+      createCard(data.card._id, cardTitle, cardList);
+      map[listItemId].cards.push(data.card);
+      socket.emit('create card', data);
+    });
 
     cardList.children('.createCard').remove();
     cardList.children('#add_btn').remove();
@@ -142,13 +167,12 @@ $(function() {
     $(cardList).css('margin-bottom','25px');
     $(cardList).parent().find('.addCard').toggle();
   });
-
   //Cancel add card
   $(listOfLists).on('click', '#cancelCard', function(){
     var cardList = $(this).parent();
-    cardList.children('.createCard').remove();
-    cardList.children('#add_btn').remove();
-    cardList.children('#cancelCard').remove();
+    $('.createCard').remove();
+    $('#add_btn').remove();
+    $('#cancelCard').remove();
     $(cardList).parent().find('.addCard').toggle();
     $(cardList).css('margin-bottom','25px');
   })
@@ -164,6 +188,8 @@ $(function() {
       url: "http://localhost:3000/boards/" + bid + "/list/" + listId,
       type: "DELETE"
     })
+
+    socket.emit('delete list', {bid: bid, lid: listId});
 
     // //update listOfLists
     $(this).parent().remove();
@@ -195,7 +221,6 @@ $('#listTitle').click(function(){
   $(this).siblings('#save-btn').css('display','block');
   $(this).siblings('#cancelList').css('display','inline-block');
 })
-
 $('#save-btn').click(function(){
   //make individual list
   var listItem = $('<li/>').addClass('listItem');
@@ -208,6 +233,7 @@ $('#save-btn').click(function(){
   postJson.done(function(data){
     createList(data._id, listTitle, listItem);
     map[data._id] = {title: listTitle, cards: []};
+    socket.emit('create list', {lastIndex: lastIndex, data:data});
   })
 
   $(this).css('display','none');
@@ -217,7 +243,6 @@ $('#save-btn').click(function(){
   $(this).siblings('#listTitle').css('color', 'white');
   $(this).parent().css('filter', 'brightness(80%)');
 })
-
 $('#cancelList').click(function(){
   $(this).css('display','none');
   $(this).siblings('#save-btn').css('display','none');
@@ -237,7 +262,7 @@ function displayCardInfo(card){
   for(cardIndex in listObj.cards){
     var card = listObj.cards[cardIndex];
     if (card._id === cardId){
-      modal.siblings('.modal-header').children('#modal-title').attr({value: card.description});
+      modal.siblings('.modal-header').children('#modal-title').attr({value: card.title});
       if(card.hasOwnProperty('users') && card.users.length > 0){
         var cardMembers = $('<div/>').attr('id', 'cardMembers');
         modal_detail.append(cardMembers[0]);
@@ -264,18 +289,18 @@ function displayCardInfo(card){
       if(card.hasOwnProperty('comments') && card.comments.length > 0){
         for(var x = 0; x < card.comments.length; x++){
           var comment = card.comments[x];
-          $('.activity').append(
+          $('.modal-activity').append(
             $('<div/>').addClass('cardActivity').append(
               $('<p/>').addClass('commentUser').html(comment.author + ": "),
               $('<p/>').addClass('commentContent').html(comment.content),
-              $('<p/>').addClass('commentDate').html(comment.date + " at " + comment.time)
+              $('<p/>').addClass('commentDate').html(comment.postDate + " at " + comment.postTime)
             )
           )
         }
       }
     }
   }
-    $(modal).children('.cardDetails').append($('<input>').attr({type: "text", id: "editDescription", value: 'Edit the description...'}));
+  $(modal).children('.cardDetails').append($('<input>').attr({type: "text", id: "editDescription", value: 'Edit the description...'}));
 }
 
 $('.modal-background').click(function(){
@@ -284,24 +309,23 @@ $('.modal-background').click(function(){
   var main = $(this).siblings('.modal-content').children('.modal-main');
   var sidebar = $(this).siblings('.modal-content').children('.modal-sidebar');
   $(main).children('.cardDetails').children().remove();
-  $(main).children('.activity').children('.cardActivity').remove();
+  $('.cardActivity').remove();
   $(main).children('.commentBox').children('#comment').val('');
   $(this).siblings('.modal-content').find('.addOptions').children().css('display', 'block');
-  $(sidebar).children('.addOptions').children('#availableMembers').remove();
-  $(sidebar).children('.addOptions').children('#availableLabels').remove();
+  $('#availableMembers').remove();
+  $('#availableLabels').remove();
 })
-
 $('#modal-close').click(function(){
   $(this).parent().parent().children().css('display','none');
   $(listOfLists).parent().css('z-index', '5');
   var main = $(this).siblings('.modal-main');
   var options = $(this).siblings('.modal-sidebar').children('.addOptions');
   $(main).children('.cardDetails').children().remove();
-  $(main).children('.activity').children('.cardActivity').remove();
+  $('.cardActivity').remove();
   $(main).children('.commentBox').children('#comment').val('');
   $(options).children().css('display', 'block');
-  $(options).children('#availableMembers').remove();
-  $(options).children('#availableLabels').remove();
+  $('#availableMembers').remove();
+  $('#availableLabels').remove();
 })
 
 //modal functions
@@ -310,56 +334,62 @@ $(function(){
   //update members
   $(main_modal).on('click', '#addMember', function(){
     $(this).siblings().css('display', 'none');
-    $(this).siblings('#availableMembers').remove();
-    $(this).parent().append($('<div/>').attr('id', 'availableMembers').append($('<h3/>').html('Add members')).append($('<input>').attr({type: "text", id: "newMember"})));
-    for(var i = 0; i < $(mainCard).find('.user').length; i++){
-      var member = $(mainCard).find('.user')[i];
-      $(this).siblings('#availableMembers').append($('<div/>').attr('id', 'currentMembers').html($($(mainCard).find('.user')[i]).text()));
-    }
-    $(this).siblings('#availableMembers').append($('<span/>').attr('id', 'newMemberBtn').html('Add'));
+    $('#availableMembers').remove();
+    $(this).parent().append($('<div/>').attr('id', 'availableMembers').append($('<h3/>').html('Add members')));
+    var getJson = $.ajax({
+        url: "http://localhost:3000/boards/" + bid + "/list/user",
+        type: "GET",
+        dataType : "json",
+    })
+    getJson.done(function(data){
+      for(var i = 0; i < data.length; i++){
+        if(data[i] != $('#userBtn').html()){
+          $('#availableMembers').append($('<div/>').attr('id', 'currentMembers').html(data[i]));
+        }
+      }
+    });
   });
-  $(main_modal).on('click', '#newMemberBtn', function(){
+  $(main_modal).on('click', '#currentMembers', function(){
     var listObj = map[$(mainCard).parent().parent().attr('id')];
     var cardId = $(mainCard).attr('id');
-    var cardLabels;
-    var cardDescription;
-    var cardUsers;
+    var card;
+    var newMember = $(this).html();
+
     //update map
     for(cardIndex in listObj.cards){
       var currentCard = listObj.cards[cardIndex];
       if (currentCard._id === cardId){
-        currentCard.users.push($(this).siblings('#newMember').val());
+        if(currentCard.hasOwnProperty('users')){
+          currentCard.users.push(newMember);
+        }
+        else{
+          currentCard.users = [newMember];
+        }
+        card = currentCard;
         break;
       }
     }
-    cardLabels = currentCard.labels;
-    cardDescription = currentCard.description;
-    cardUsers = currentCard.users;
     // //update api
     var patchJson = $.ajax({
         url: "http://localhost:3000/boards/" + bid + "/list/" + $(mainCard).parent().parent().attr('id') + "/card/" + cardId,
         type: "PATCH",
-        data: {"labels": cardLabels,
-        "description": cardDescription,
-        "users": cardUsers,
-        "_id": cardId},
+        data: {card},
         dataType : "json",
-    })
+    });
 
-    //update card
     if($(mainCard).find('.users').length == 0){
       $(mainCard).append($('<div/>').addClass('userList').append(
         $('<ul/>').addClass('users').append(
-          $('<li/>').addClass('user').html($(this).siblings('#newMember').val())[0]
+          $('<li/>').addClass('user').html(newMember)[0]
         )
       )
     )}
     else{
-      $(mainCard).find('.users')[0].append($('<li/>').addClass('user').html($(this).siblings('#newMember').val())[0]);
+      $(mainCard).find('.users')[0].append($('<li/>').addClass('user').html(newMember)[0]);
     }
-    $(this).parent().parent().parent().siblings('.modal-main').children('.cardDetails').children().remove();
+
+    $('.cardDetails').children().remove();
     $(this).parent().siblings().css('display', 'block');
-    $(this).siblings('#newMember').val('');
     $(this).parent().remove();
     displayCardInfo(mainCard);
   })
@@ -367,7 +397,7 @@ $(function(){
   //update labels
   $(main_modal).on('click', '#addLabel', function(){
     $(this).siblings().css('display', 'none');
-    $(this).siblings('#availableLabels').remove();
+    $('#availableLabels').remove();
     $(this).parent().append($('<div/>').attr('id', 'availableLabels'));
     for(labelIndex in labelColors){
       $(this).siblings('#availableLabels').append($('<div/>').addClass('modal_label').attr('id', labelColors[labelIndex]));
@@ -376,28 +406,26 @@ $(function(){
   $(main_modal).on('click', '.modal_label', function(){
     var listObj = map[$(mainCard).parent().parent().attr('id')];
     var cardId = $(mainCard).attr('id');
-    var cardLabels;
-    var cardDescription;
-    var cardUsers;
+    var card;
     //update map
     for(cardIndex in listObj.cards){
       var currentCard = listObj.cards[cardIndex];
       if (currentCard._id === cardId){
-        currentCard.labels.push($(this).attr('id'));
+        if(currentCard.hasOwnProperty('labels')){
+          currentCard.labels.push($(this).attr('id'));
+        }
+        else{
+          currentCard.labels = [$(this).attr('id')];
+        }
+        card = currentCard;
         break;
       }
     }
-    cardLabels = currentCard.labels;
-    cardDescription = currentCard.description;
-    cardUsers = currentCard.users;
     //update api
     var patchJson = $.ajax({
         url: "http://localhost:3000/boards/" + bid + "/list/" + $(mainCard).parent().parent().attr('id') + "/card/" + cardId,
         type: "PATCH",
-        data: {"labels": cardLabels,
-        "description": cardDescription,
-        "users": cardUsers,
-        "_id": cardId},
+        data: {card},
         dataType : "json",
     })
     //update card
@@ -411,7 +439,7 @@ $(function(){
     else{
       $(mainCard).find('.labelList')[0].prepend($('<li/>').attr('id', $(this).attr('id'))[0]);
     }
-    $(this).parent().parent().parent().siblings('.modal-main').children('.cardDetails').children().remove();
+    $('.cardDetails').children().remove();
     $(this).parent().siblings().css('display', 'block');
     $(this).parent().remove();
     displayCardInfo(mainCard);
@@ -429,30 +457,37 @@ $(function(){
     var postJson = $.ajax({
         url: "http://localhost:3000/boards/" + bid + "/list/" + $(mainCard).parent().parent().attr('id') + "/card/" + $(mainCard).attr('id') + "/comment",
         type: "POST",
-        data: {'content': content, date: currentTime},
+        data: {'content': content, 'date': date, 'time': time},
         dataType : "json",
-    })
+    });
     postJson.done(function(data){
       //update card modal
       for(cardIndex in listObj.cards){
         var currentCard = listObj.cards[cardIndex];
         if (currentCard._id === cardId){
-          currentCard.comments.push({author: data.author, content: data.content, date: date, time: time});
+          if(currentCard.hasOwnProperty('comments')){
+            currentCard.comments.push({author: data.author, content: data.content, postDate: date, postTime: time});
+          }
+          else{
+            currentCard.comments = [{author: data.author, content: data.content, postDate: date, postTime: time}];
+          }
           break;
         }
       }
-      $('.activity').append(
+      $('.modal-activity').append(
         $('<div/>').addClass('cardActivity').append(
           $('<p/>').addClass('commentUser').html(data.author + ": "),
           $('<p/>').addClass('commentContent').html(data.content),
-          $('<p/>').addClass('commentDate').html(date + " at " + time)
+          $('<p/>').addClass('commentDate').html(data.postDate + " at " + data.postTime)
         )
       )
     });
-    $(this).parent().siblings('.cardDetails').children().remove();
+    $('.cardDetails').children().remove();
+    $('.cardActivity').remove();
     $('#comment').val('');
     displayCardInfo(mainCard);
   })
+
   //delete card
   $(main_modal).on('click', '#deleteCard', function(){
     var listId = $(mainCard).parent().parent().attr('id');
@@ -462,24 +497,23 @@ $(function(){
         var cards = map[list].cards;
         for(cardIndex in cards){
           if(cards[cardIndex]._id === $(mainCard).attr('id')){
-            var index = cardIndex;
             var deleteJson = $.ajax({
               url: "http://localhost:3000/boards/" + bid + "/list/" + listId + "/card/" + cards[cardIndex]._id,
               type: "DELETE"
             })
-            deleteJson.done(function(){
-              cards.splice(index, 1);
+            deleteJson.done(function(data){
+              socket.emit('delete card', {bid: data.bid, lid: data.lid, cid: $(mainCard).attr('id'), index: cardIndex});
             })
+            cards.splice(cardIndex, 1);
           }
         }
       }
     }
-
     //update cardList
-    $(mainCard).parent().children('#' + $(mainCard).attr('id')).remove();
+    $('#' + $(mainCard).attr('id')).remove();
 
     $(modal).parent().parent().children().css('display','none');
     $(listOfLists).parent().css('z-index', '5');
-    $(modal).children('.cardDetails').children().remove();
+    $('.cardDetails').children().remove();
   });
 })
